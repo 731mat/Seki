@@ -728,8 +728,6 @@ void Robot::setMotorMowRPMState(boolean motorMowRpmState){
   }
 }
 
-/*
-Hier rausgenommen -> siehe ODO-ISR in der mower.cpp
 
 // ---- odometry (interrupt) --------------------------------------------------------
 // Determines the rotation count and direction of the odometry encoders. Called in the odometry pins interrupt.
@@ -779,7 +777,7 @@ void Robot::setOdometryState(unsigned long timeMicros, boolean odometryLeftState
     }
   }    
 }
-*/
+
 
 // ---- RC (interrupt) --------------------------------------------------------------
 // RC remote control helper
@@ -1384,8 +1382,7 @@ void Robot::testOdometry(){
   while (true){ 
     resetIdleTime();
     if ((odometryLeft != lastLeft) || (odometryRight != lastRight)) {
-      //Console.print(F("Press'f' forward, 'r' reverse, 'z' reset  "));
-      Console.print(F("Press'f' forward, 'r' reverse, 'z' reset, 's' stop, 'o' one revolution  "));
+      Console.print(F("Press'f' forward, 'r' reverse, 'z' reset  "));
       Console.print(F("left="));
       Console.print(odometryLeft);
       Console.print(F("  right="));
@@ -1408,42 +1405,6 @@ void Robot::testOdometry(){
       if (ch == 'z') {
           odometryLeft = 0; odometryRight = 0;
       }            
-      if (ch == 's') {
-          motorLeftPWMCurr = 0; motorRightPWMCurr = 0;
-          setMotorPWM(motorLeftPWMCurr, motorRightPWMCurr, false); 
-      }                  
-      if (ch == 'o') 
-      {
-          odometryLeft = 0; odometryRight = 0;
-          motorLeftPWMCurr = motorSpeedMaxPwm/2; motorRightPWMCurr = motorSpeedMaxPwm/2;  
-          setMotorPWM(motorLeftPWMCurr, motorRightPWMCurr, false);
-          while (true)
-          {
-            if (Console.available() > 0)
-            {
-              ch = (char)Console.read();            
-              if (ch == '0') break;
-            }
-            
-            if ((odometryLeft != lastLeft) || (odometryRight != lastRight)) {
-              //Console.print(F("Press'f' forward, 'r' reverse, 'z' reset  "));
-              Console.print(F("Press'f' forward, 'r' reverse, 'z' reset, 's' stop, 'o' one revolution  "));
-              Console.print(F("left="));
-              Console.print(odometryLeft);
-              Console.print(F("  right="));
-              Console.println(odometryRight);              
-              lastLeft = odometryLeft;
-              lastRight = odometryRight;
-            }
-            
-            if ((odometryLeft >= odometryTicksPerRevolution) || (odometryRight >= odometryTicksPerRevolution))
-            {
-              motorLeftPWMCurr = 0; motorRightPWMCurr = 0;
-              setMotorPWM(motorLeftPWMCurr, motorRightPWMCurr, false);
-              break;
-            }
-          }  
-      }
     }
   };
   motorLeftPWMCurr = 0; motorRightPWMCurr = 0;
@@ -2095,34 +2056,14 @@ void Robot::setNextState(byte stateNew, byte dir){
     stateEndTime = millis() + perimeterOutRevTime + motorZeroSettleTime; 
   }
   else if (stateNew == STATE_PERI_OUT_ROLL){
-  
-  
-  
-  	//Ehl
-	//imuDriveHeading = scalePI(imuDriveHeading + PI); // toggle heading 180 degree (IMU)
-	if (imuRollDir == LEFT)
-	{
-		imuDriveHeading = scalePI(imuDriveHeading - random((PI / 2), PI )); // random toggle heading between 90 degree and 180 degrees (IMU)
-		imuRollHeading = scalePI(imuDriveHeading);
-		imuRollDir = rollDir;
-	}
-	else
-	{
-		imuDriveHeading = scalePI(imuDriveHeading + random((PI / 2), PI )); // random toggle heading between 90 degree and 180 degrees (IMU)
-		imuRollHeading = scalePI(imuDriveHeading);
-		imuRollDir = rollDir;
-	}
-	stateEndTime = millis() + random(perimeterOutRollTimeMin,perimeterOutRollTimeMax) + motorZeroSettleTime;
-	if (dir == RIGHT)
-	{
-		motorLeftSpeedRpmSet = motorSpeedMaxRpm/1.25;
-		motorRightSpeedRpmSet = -motorLeftSpeedRpmSet;           
-	}
-	else
-	{
-		motorRightSpeedRpmSet = motorSpeedMaxRpm/1.25;
-		motorLeftSpeedRpmSet = -motorRightSpeedRpmSet; 
-	}
+    stateEndTime = millis() + random(perimeterOutRollTimeMin,perimeterOutRollTimeMax) + motorZeroSettleTime;
+      if (dir == RIGHT){
+    motorLeftSpeedRpmSet = motorSpeedMaxRpm/1.25;
+    motorRightSpeedRpmSet = -motorLeftSpeedRpmSet;           
+      } else {
+    motorRightSpeedRpmSet = motorSpeedMaxRpm/1.25;
+    motorLeftSpeedRpmSet = -motorRightSpeedRpmSet; 
+      }
   }
   else if (stateNew == STATE_FORWARD){      
     motorLeftSpeedRpmSet = motorRightSpeedRpmSet = motorSpeedMaxRpm;  
@@ -2147,7 +2088,9 @@ void Robot::setNextState(byte stateNew, byte dir){
 	motorRightSpeedRpmSet = -motorLeftSpeedRpmSet;						
       } else {
 	motorRightSpeedRpmSet = motorSpeedMaxRpm/1.25;
-	motorLeftSpeedRpmSet = -motorRightSpeedRpmSet;	
+	motorLeftSpeedRpmSet = -motorRightSpeedRpmSet
+
+  ;	
       }      
   }  
   if (stateNew == STATE_REMOTE){

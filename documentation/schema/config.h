@@ -14,4 +14,12 @@
   #include "mega.h"
 #endif
 
+#ifdef USE_MINI
+  #include "mini.h"  // Mini robot
+#endif
+
+#ifdef USE_SIM
+  #include "sim.h"  // simbad simulator - maybe future :)
+#endif
+
 

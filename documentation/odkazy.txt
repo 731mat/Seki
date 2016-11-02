@@ -1,0 +1,8 @@
+// regulátor zapojeni, code
+http://www.hessmer.org/blog/2013/12/28/ibt-2-h-bridge-with-arduino/
+
+// driver - zapojeni pro software ardumower
+http://wiki.ardumower.de/index.php?title=Motor_driver_ru
+
+// stratši verze programu android ide
+https://www.arduino.cc/en/Main/OldSoftwareReleases
