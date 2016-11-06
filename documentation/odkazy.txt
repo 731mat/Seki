@@ -6,3 +6,9 @@ http://wiki.ardumower.de/index.php?title=Motor_driver_ru
 
 // stratši verze programu android ide
 https://www.arduino.cc/en/Main/OldSoftwareReleases
+
+// navod implementace esp8266
+https://github.com/FredericG-BE/ardumower/wiki/Using-ESP8266-WIFI-module-on-Ardumower
+
+zapojeni IBT-2
+http://wiki.ardumower.de/index.php?title=Datei:BTS7960B_HBridgemontage-635056137829375000.jpg

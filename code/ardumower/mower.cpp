@@ -1,4 +1,4 @@
-
+//pokus
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 // NOTE: Verify in config.h that you have enabled 'USE_MOWER' ! 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *   
@@ -147,10 +147,10 @@ Mower::Mower(){
   // ------ rain ------------------------------------
   rainUse          = 0;      // use rain sensor?
   // ------ sonar ------------------------------------
-  sonarUse          = 0;      // use ultra sonic sensor? (WARNING: robot will slow down, if enabled but not connected!)
-  sonarLeftUse      = 1;
-  sonarRightUse     = 1;
-  sonarCenterUse    = 0;
+  sonarUse          = 1;      // use ultra sonic sensor? (WARNING: robot will slow down, if enabled but not connected!)
+  sonarLeftUse      = 0;
+  sonarRightUse     = 0;
+  sonarCenterUse    = 1;
   sonarTriggerBelow = 1050;    // ultrasonic sensor trigger distance
   // ------ perimeter ---------------------------------
   perimeterUse       = 0;      // use perimeter?    
@@ -180,7 +180,7 @@ Mower::Mower(){
   // ------ model R/C ------------------------------------
   remoteUse         = 0;       // use model remote control (R/C)?
   // ------ battery -------------------------------------
-  batMonitor = 1;              // monitor battery and charge voltage?
+  batMonitor = 0;              // monitor battery and charge voltage?
   batGoHomeIfBelow = 23.7;     // drive home voltage (Volt)
   batSwitchOffIfBelow = 21.7;  // switch off battery if below voltage (Volt)
   batSwitchOffIfIdle = 1;      // switch off battery if idle (minutes)

@@ -43,6 +43,7 @@ char* consoleModeNames[]={"sen_counters", "sen_values", "perimeter", "off"};
 
 Robot::Robot(){
   name = "Generic";
+
   developerActive = false;
   rc.setRobot(this);
   
@@ -1641,6 +1642,7 @@ void Robot::commsMenuSelect(void) {
 
 void Robot::readSerial() {
   // serial input
+  Console.println(F("serial"));
   if (Console.available() > 0) {     
      char ch = (char)Console.read();
      resetIdleTime();
@@ -2787,10 +2789,12 @@ void Robot::loop()  {
   calcOdometry();
   checkOdometryFaults();    
   checkButton(); 
-  motorMowControl(); 
+  motorMowControl();
   checkTilt(); 
+
   
   if (imuUse) imu.update();  
+  
 
   if (gpsUse) { 
     gps.feed();
