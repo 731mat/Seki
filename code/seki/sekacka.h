@@ -19,16 +19,25 @@ public:
     void printInfo();
     void readSensors(); // vyber druhu senzoru
     int readSensor(char type);   // vyber urciteho senzoru
+    void motorUpdate();
 
     //serial
     void printMenu();
     void menu();
     void readSerial();
+    void testMotors();
 
     // time
     unsigned long startTime;
     unsigned long nextTimeInfo;
     int updateTimeInfo;
+    unsigned long nextTimeMotor;
+    int updateTimeMotor;
+    int timeUpdateTime;
+    int timeRotage;
+    int timeRotageMotor;
+    // zapnuti pohybu
+    bool drive;
 
     // --------- sonar ----------------------------------
     // ultra sonic sensor distance-to-obstacle (cm)
@@ -41,6 +50,8 @@ public:
     unsigned int sonarDistLeft;
     unsigned long nextTimeSonar;
     unsigned long nextTimeCheckSonar;
+    int distMin;
+    int distSlow;
 };
 
 

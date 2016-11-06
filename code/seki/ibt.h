@@ -14,6 +14,8 @@ public:
     void setData(bool smer, int value);
     void setStop();
     void aplikovat();
+    bool getSmer();
+    int getValue();
 
 private:
     int pinMotorEnableR;

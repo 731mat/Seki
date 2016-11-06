@@ -15,7 +15,7 @@
 
 #define pinMotorRightEnableR 26      // Forward drive enable input
 #define pinMotorRightEnableL 28      // Forward drive enable input
-#define pinMotorRightPWM 3           // M1_IN1 left motor PWM pin
+#define pinMotorRightPWM 3           // M1_IN1 left motor PWM pinn
 #define pinMotorRightSense A1       // M1_FB  left motor current sense
 
 // ----- sonar ----------------------------------------
@@ -43,6 +43,12 @@ Sekacka::Sekacka(){
     nextTimeInfo = 0;     // cislo kdy bude budouci aktualizace
     updateTimeInfo = 500; // update co 0.5 sec.
 
+    nextTimeMotor = 0;     // cislo kdy bude budouci aktualizace
+    updateTimeMotor = 100; // update co 0.5 sec.
+
+    timeRotage = 0;
+    timeRotageMotor = 500;
+
     // sonar
     sonarUse       = 0;      // use ultra sonic sensor?
     sonarLeftUse   = 0;
@@ -53,6 +59,13 @@ Sekacka::Sekacka(){
     sonarDistCenter = 0;
     sonarDistRight = 0;
     sonarDistLeft  = 0;
+    distMin = 20;
+    distSlow = 80;
+
+    // zapnuti pohybu
+    drive = false;
+
+    timeUpdateTime = 0;
 
 }
 
@@ -84,7 +97,7 @@ void Sekacka::setup(){
 
     // led
     pinMode(pinLed, OUTPUT);
-    digitalWrite(pinLed, HIGH);
+    digitalWrite(pinLed, LOW);
 
     // motor Stop
     motorL.setStop();
@@ -106,10 +119,17 @@ void Sekacka::loop(){
         nextTimeInfo = millis() + updateTimeInfo;
         printInfo();
     }
+
+    if (millis() >= nextTimeMotor && drive) {
+        nextTimeMotor = millis() + updateTimeMotor;
+        motorUpdate();
+    }
+
 }
 
 void Sekacka::printInfo(){
-    Serial.println("asfasdhfuasdhfkjasedhfuaeskdyncaksdfjslafjdslfjasiejdfdsljfaiejasilefjawil");
+    Serial.print("M1 - s - ");
+    Serial.println();
 }
 
 
@@ -149,6 +169,45 @@ int Sekacka::readSensor(char type){
 }
 
 
+void Sekacka::motorUpdate(){
+    timeUpdateTime++;
+
+    //zpomalení před překážkou
+    if(sonarDistCenter < distSlow && sonarDistCenter > distMin){
+        motorL.setData(true,100);
+        motorR.setData(true,100);
+    }
+
+    // otočení
+    if(sonarDistCenter <= distMin || timeRotage > 0  && timeRotage < timeRotageMotor){
+        timeRotage++;
+        if(timeRotage < timeRotageMotor){
+            motorR.setData(true, 50);
+            motorL.setData(false, 50);
+            timeUpdateTime = 0;
+            return 0;
+        }
+    }else
+        timeRotage = 0;
+
+    // pomalý rozjezd
+    if(timeUpdateTime < updateTimeMotor/10){
+        motorL.setData(true,map(timeUpdateTime,0,10,0,255));
+        motorR.setData(true,map(timeUpdateTime,0,10,0,255));
+    }else{
+        motorL.setData(true,255);
+        motorR.setData(true,255);
+    }
+}
+
+
+
+
+
+
+
+////////    SERIAL /////////////////////////////////////////
+
 
 void Sekacka::readSerial() {
     // serial input
@@ -179,6 +238,11 @@ void Sekacka::menu(){
                     testMotors();
                     printMenu();
                     break;
+                case 'D':
+                    testMotors();
+                    printMenu();
+                    break;
+
 
             }
         }
@@ -191,31 +255,34 @@ void Sekacka::printMenu(){
     Serial.println();
     Serial.println(F(" MAIN MENU:"));
     Serial.println(F("1=test motors"));
-    Serial.println(F("2=test odometry"));
+    Serial.println(F("D=start drive"));
     Serial.println(F("0=exit"));
     Serial.println();
 }
 
+
+
 void Sekacka::testMotors(){
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0; i < 256; i++) {
         motorR.setData(1,i);
-        delay(200);
         printInfo();
+        delay(200);
     }
     for (int i = 256; i > 0;i--) {
-        motorR.setData(1,i);
+        motorR.setData(0,i);
         printInfo();
         delay(200);
     }
     motorR.setStop();
 
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0; i < 256; i++) {
         motorL.setData(1,i);
-        delay(200);
         printInfo();
+        delay(200);
+
     }
     for (int i = 256; i > 0;i--) {
-        motorL.setData(1,i);
+        motorL.setData(0,i);
         printInfo();
         delay(200);
     }

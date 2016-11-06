@@ -13,6 +13,9 @@ Ibt::Ibt(int pinMotorEnableR, int pinMotorEnableL, int pinMotorPWM, int pinMotor
 }
 
 void Ibt::setData(bool smer, int value) {
+    if(smer == this->smer && value == this->value)
+        return 0;
+
     this->smer = smer;
     if(value >= 0 && value <= 255)
         this->value = value;
@@ -31,7 +34,6 @@ void Ibt::aplikovat() {
         digitalWrite(this->pinMotorEnableR, LOW);
         analogWrite(this->pinMotorPWM, this->value);
     }
-    Serial.println("MOTOR SET");
 }
 
 void Ibt::setStop() {
@@ -39,4 +41,8 @@ void Ibt::setStop() {
     digitalWrite(this->pinMotorEnableR, LOW);
     analogWrite(this->pinMotorPWM, 0);
 }
+
+
+bool Ibt::getSmer() { return this->smer; }
+int Ibt::getValue() { return this->value; }
 
