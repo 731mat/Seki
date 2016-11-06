@@ -35,8 +35,8 @@
       <file leaf-file-name="sekacka.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sekacka.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="141" column="5" selection-start-line="141" selection-start-column="5" selection-end-line="141" selection-end-column="5" />
+            <state relative-caret-position="3315">
+              <caret line="221" column="21" selection-start-line="221" selection-start-column="21" selection-end-line="221" selection-end-column="21" />
               <folding>
                 <element signature="e#37#57#0" expanded="true" />
               </folding>
@@ -48,8 +48,10 @@
         <entry file="file://$PROJECT_DIR$/ibt.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="5" column="16" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-              <folding />
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding>
+                <element signature="e#37#53#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -96,8 +98,8 @@
         <option value="$PROJECT_DIR$/drivers.cpp" />
         <option value="$PROJECT_DIR$/ibt.cpp" />
         <option value="$PROJECT_DIR$/drivers.h" />
-        <option value="$PROJECT_DIR$/sekacka.cpp" />
         <option value="$PROJECT_DIR$/sekacka.h" />
+        <option value="$PROJECT_DIR$/sekacka.cpp" />
       </list>
     </option>
   </component>
@@ -373,12 +375,12 @@
       <option name="presentableId" value="Default" />
       <updated>1478378403997</updated>
       <workItem from="1478378405713" duration="1080000" />
-      <workItem from="1478427078271" duration="11873000" />
+      <workItem from="1478427078271" duration="13938000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12953000" />
+    <option name="totallyTimeSpent" value="15018000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
@@ -505,15 +507,17 @@
     <entry file="file://$PROJECT_DIR$/ibt.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="5" column="16" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
-          <folding />
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding>
+            <element signature="e#37#53#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sekacka.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="141" column="5" selection-start-line="141" selection-start-column="5" selection-end-line="141" selection-end-column="5" />
+        <state relative-caret-position="3315">
+          <caret line="221" column="21" selection-start-line="221" selection-start-column="21" selection-end-line="221" selection-end-column="21" />
           <folding>
             <element signature="e#37#57#0" expanded="true" />
           </folding>

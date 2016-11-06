@@ -18,6 +18,7 @@ void Ibt::setData(bool smer, int value) {
         this->value = value;
     else
         this->value = 0;
+    aplikovat();
 }
 
 void Ibt::aplikovat() {

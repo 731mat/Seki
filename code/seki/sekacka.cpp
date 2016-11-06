@@ -28,8 +28,8 @@
 #define pinSonarLeftTrigger 34
 #define pinSonarLeftEcho 36
 
-// -----------------------------------------------------
-
+// ------ orther  -----------------------------------------------
+#define pinLed 13
 
 #define CONSOLE_BAUDRATE    19200       // baudrate used for console
 
@@ -82,6 +82,10 @@ void Sekacka::setup(){
     pinMode(pinSonarRightTrigger, OUTPUT);
     pinMode(pinSonarRightEcho, INPUT);
 
+    // led
+    pinMode(pinLed, OUTPUT);
+    digitalWrite(pinLed, HIGH);
+
     // motor Stop
     motorL.setStop();
     motorR.setStop();
@@ -94,8 +98,9 @@ void Sekacka::setup(){
 
 void Sekacka::loop(){
     //stateTime = millis() - stateStartTime;
-
+    
     readSensors();
+    readSerial();
 
     if (millis() >= nextTimeInfo) {
         nextTimeInfo = millis() + updateTimeInfo;
@@ -104,7 +109,7 @@ void Sekacka::loop(){
 }
 
 void Sekacka::printInfo(){
-
+    Serial.println("asfasdhfuasdhfkjasedhfuaeskdyncaksdfjslafjdslfjasiejdfdsljfaiejasilefjawil");
 }
 
 
@@ -147,8 +152,8 @@ int Sekacka::readSensor(char type){
 
 void Sekacka::readSerial() {
     // serial input
-    if (Console.available() > 0) {
-        char ch = (char)Console.read();
+    if (Serial.available() > 0) {
+        char ch = (char)Serial.read();
         switch (ch){
             case 'm':
                 menu();
@@ -165,14 +170,13 @@ void Sekacka::menu(){
     char ch;
     printMenu();
     while(true){
-        imu.update();
-        if (Console.available() > 0) {
-            ch = (char)Console.read();
+        if (Serial.available() > 0) {
+            ch = (char)Serial.read();
             switch (ch){
                 case '0':
                     return;
                 case '1':
-                    //testMotors();
+                    testMotors();
                     printMenu();
                     break;
 
@@ -190,5 +194,31 @@ void Sekacka::printMenu(){
     Serial.println(F("2=test odometry"));
     Serial.println(F("0=exit"));
     Serial.println();
+}
+
+void Sekacka::testMotors(){
+    for (int i = 0; i < 256; ++i) {
+        motorR.setData(1,i);
+        delay(200);
+        printInfo();
+    }
+    for (int i = 256; i > 0;i--) {
+        motorR.setData(1,i);
+        printInfo();
+        delay(200);
+    }
+    motorR.setStop();
+
+    for (int i = 0; i < 256; ++i) {
+        motorL.setData(1,i);
+        delay(200);
+        printInfo();
+    }
+    for (int i = 256; i > 0;i--) {
+        motorL.setData(1,i);
+        printInfo();
+        delay(200);
+    }
+    motorL.setStop();
 }
 
