@@ -27,6 +27,8 @@ public:
     void readSerial();
     void testMotors();
 
+    int usePrintInfo; // print info
+
     // time
     unsigned long startTime;
     unsigned long nextTimeInfo;

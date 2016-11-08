@@ -10,7 +10,7 @@
 
 class Ibt {
 public:
-    Ibt(int pinMotorLeftEnableR, int pinMotorEnableL, int pinMotorPWM, int pinMotorSense);
+    Ibt(int pinMotorLeftEnableR, int pinMotorEnableL, int pinMotorPWMR, int pinMotorPWML, int pinMotorSense);
     void setData(bool smer, int value);
     void setStop();
     void aplikovat();
@@ -20,7 +20,8 @@ public:
 private:
     int pinMotorEnableR;
     int pinMotorEnableL;
-    int pinMotorPWM;
+    int pinMotorPWML;
+    int pinMotorPWMR;
     int pinMotorSense;
     int pin;
     bool smer;

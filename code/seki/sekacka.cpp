@@ -7,65 +7,72 @@
 #include "drivers.h"
 #include <Arduino.h>
 
-// ------ pins---------------------------------------
-#define pinMotorLeftEnableR 22      // Forward drive enable input
-#define pinMotorLeftEnableL 24      // Forward drive enable input
-#define pinMotorLeftPWM 2           // M1_IN1 left motor PWM pin
-#define pinMotorLeftSense A0       // M1_FB  left motor current sense
 
-#define pinMotorRightEnableR 26      // Forward drive enable input
-#define pinMotorRightEnableL 28      // Forward drive enable input
-#define pinMotorRightPWM 3           // M1_IN1 left motor PWM pinn
-#define pinMotorRightSense A1       // M1_FB  left motor current sense
+// ------ pins---------------------------------------
+#define pinMotorLeftEnableR 22     //  Forward drive left enable
+#define pinMotorLeftEnableL 24     //  backward drive left enable
+#define pinMotorLeftPWMR 2         //  Forward left motor PWM pin
+#define pinMotorLeftPWML 3         //  backward left motor PWM pin
+#define pinMotorLeftSense A0       //  left motor current sense
+
+#define pinMotorRightEnableR 26    // Forward drive right enable
+#define pinMotorRightEnableL 28    // backward drive right enable
+#define pinMotorRightPWMR 4        // Forward right motor PWM pin
+#define pinMotorRightPWML 5        // backward right motor PWM pin
+#define pinMotorRightSense A1      // Right motor current sense
 
 // ----- sonar ----------------------------------------
-#define pinSonarCenterTrigger 24
-#define pinSonarCenterEcho 22
+#define pinSonarCenterTrigger 24   // sonar center Trigger
+#define pinSonarCenterEcho 22      // sonar center echo
 
-#define pinSonarRightTrigger 30
-#define pinSonarRightEcho 32
+#define pinSonarRightTrigger 30    // sonar right Trigger
+#define pinSonarRightEcho 32       // sonar right Echo
 
-#define pinSonarLeftTrigger 34
-#define pinSonarLeftEcho 36
+#define pinSonarLeftTrigger 34     // sonar left Trigger
+#define pinSonarLeftEcho 36        // sonar left Echo
 
 // ------ orther  -----------------------------------------------
-#define pinLed 13
+#define pinLed 13                 // led info
 
 #define CONSOLE_BAUDRATE    19200       // baudrate used for console
 
+// ----- inicializace motoru L,R
+//Ibt(int pinMotorLeftEnableR, int pinMotorEnableL, int pinMotorPWMR, int pinMotorPWML, int pinMotorSense);
+Ibt motorL(pinMotorLeftEnableR, pinMotorLeftEnableL, pinMotorLeftPWMR, pinMotorLeftPWML, pinMotorLeftSense);
+Ibt motorR(pinMotorRightEnableR, pinMotorRightEnableL, pinMotorRightPWMR, pinMotorRightPWML, pinMotorRightSense);
 
-//Ibt(int pinMotorLeftEnableR, int pinMotorEnableL, int pinMotorPWM, int pinMotorSense);
-Ibt motorL(pinMotorLeftEnableR, pinMotorLeftEnableL, pinMotorLeftPWM, pinMotorLeftSense);
-Ibt motorR(pinMotorRightEnableR, pinMotorRightEnableL, pinMotorRightPWM, pinMotorRightSense);
 
 Sekacka::Sekacka(){
+
+    usePrintInfo=0;     // co se bude vypisovat z print info
+
     startTime = 0;     // start in milis()
     nextTimeInfo = 0;     // cislo kdy bude budouci aktualizace
     updateTimeInfo = 500; // update co 0.5 sec.
 
-    nextTimeMotor = 0;     // cislo kdy bude budouci aktualizace
-    updateTimeMotor = 100; // update co 0.5 sec.
-
-    timeRotage = 0;
-    timeRotageMotor = 500;
+    nextTimeMotor = 0;       // cislo kdy bude budouci aktualizace
+    updateTimeMotor = 100;   // cas k update motor
+    timeUpdateTime = 0;     //smycky k rozjizdeni
+    timeRotage = 0;         // smycky k otoceni sekiho
+    timeRotageMotor = 500;  // kolik smycek "timeRotage" je zapotřebi k otoceni sekiho
 
     // sonar
     sonarUse       = 0;      // use ultra sonic sensor?
-    sonarLeftUse   = 0;
-    sonarRightUse  = 0;
-    sonarCenterUse = 0;
+    sonarLeftUse   = 0;      // use LEFT ultra sonic sensor
+    sonarRightUse  = 0;      // use RIGHT ultra sonic sensor
+    sonarCenterUse = 0;      // use CENTER ultra sonic sensor
 
-    nextTimeSonar  = 0;
-    sonarDistCenter = 0;
-    sonarDistRight = 0;
-    sonarDistLeft  = 0;
-    distMin = 20;
-    distSlow = 80;
+    nextTimeSonar  = 0;      // cas dalsi aktualizace ultra sonic sensor
+    sonarDistCenter = 0;     // vzdalenost senzor - prekazkou
+    sonarDistRight = 0;      // vzdalenost senzor - prekazkou
+    sonarDistLeft  = 0;      // vzdalenost senzor - prekazkou
+    distMin = 20;            // vzdalenost senzor - prekazkou kdy musi zastavit
+    distSlow = 80;           // vzdalenost senzor - prekazkou  kdy musi spomalit
 
-    // zapnuti pohybu
-    drive = false;
 
-    timeUpdateTime = 0;
+    drive = false; // zapnuti pohybu
+
+
 
 }
 
@@ -78,13 +85,15 @@ void Sekacka::setup(){
     // left wheel motor
     pinMode(pinMotorLeftEnableR, OUTPUT);   digitalWrite(pinMotorLeftEnableR, LOW);
     pinMode(pinMotorLeftEnableL, OUTPUT);   digitalWrite(pinMotorLeftEnableL, LOW);
-    pinMode(pinMotorLeftPWM, OUTPUT);
+    pinMode(pinMotorLeftPWMR, OUTPUT);
+    pinMode(pinMotorLeftPWML, OUTPUT);
     pinMode(pinMotorLeftSense, INPUT);
 
     // left wheel motor
     pinMode(pinMotorRightEnableR, OUTPUT);   digitalWrite(pinMotorRightEnableR, LOW);
     pinMode(pinMotorRightEnableL, OUTPUT);   digitalWrite(pinMotorRightEnableL, LOW);
-    pinMode(pinMotorRightPWM, OUTPUT);
+    pinMode(pinMotorRightPWMR, OUTPUT);
+    pinMode(pinMotorRightPWML, OUTPUT);
     pinMode(pinMotorRightSense, INPUT);
 
     // sonar
@@ -115,7 +124,7 @@ void Sekacka::loop(){
     readSensors();
     readSerial();
 
-    if (millis() >= nextTimeInfo) {
+    if (millis() >= nextTimeInfo && usePrintInfo !=0) {
         nextTimeInfo = millis() + updateTimeInfo;
         printInfo();
     }
@@ -128,8 +137,13 @@ void Sekacka::loop(){
 }
 
 void Sekacka::printInfo(){
-    Serial.print("M1 - s - ");
-    Serial.println();
+    switch (usePrintInfo){
+        case 1:
+            Serial.print("M1 - s - ");
+            Serial.println();
+            break;
+    }
+
 }
 
 
@@ -255,6 +269,7 @@ void Sekacka::printMenu(){
     Serial.println();
     Serial.println(F(" MAIN MENU:"));
     Serial.println(F("1=test motors"));
+    Serial.println(F("I=infoStart"));
     Serial.println(F("D=start drive"));
     Serial.println(F("0=exit"));
     Serial.println();
