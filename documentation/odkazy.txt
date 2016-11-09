@@ -12,3 +12,10 @@ https://github.com/FredericG-BE/ardumower/wiki/Using-ESP8266-WIFI-module-on-Ardu
 
 zapojeni IBT-2
 http://wiki.ardumower.de/index.php?title=Datei:BTS7960B_HBridgemontage-635056137829375000.jpg
+
+
+//android bluetooth
+https://wingoodharry.wordpress.com/2014/04/15/android-sendreceive-data-with-arduino-using-bluetooth-part-2/
+
+
+// dodělat bluetooth

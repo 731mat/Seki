@@ -5,9 +5,8 @@
 #include "ibt.h"
 #include <Arduino.h>
 
-Ibt::Ibt(int pinMotorLeftEnableR, int pinMotorEnableL, int pinMotorPWMR, int pinMotorPWML, int pinMotorSense) {
-    this->pinMotorEnableR = pinMotorEnableR;
-    this->pinMotorEnableL = pinMotorEnableL;
+Ibt::Ibt(int pinMotorEnable, int pinMotorPWMR, int pinMotorPWML, int pinMotorSense) {
+    this->pinMotorEnable = pinMotorEnable;
     this->pinMotorPWML = pinMotorPWML;
     this->pinMotorPWMR = pinMotorPWMR;
     this->pinMotorSense = pinMotorSense;
@@ -26,20 +25,24 @@ void Ibt::setData(bool smer, int value) {
 }
 
 void Ibt::aplikovat() {
+    if(this->value == 0){
+        analogWrite(this->pinMotorPWMR, 0);
+        analogWrite(this->pinMotorPWML, 0);
+        digitalWrite(this->pinMotorEnable, LOW);
+        return;
+    }
+    digitalWrite(this->pinMotorEnable, HIGH);
     if(this->smer == true){
-        digitalWrite(this->pinMotorEnableL, LOW);
-        digitalWrite(this->pinMotorEnableR, HIGH);
+        analogWrite(this->pinMotorPWML, 0);
         analogWrite(this->pinMotorPWMR, this->value);
     } else{
-        digitalWrite(this->pinMotorEnableL, HIGH);
-        digitalWrite(this->pinMotorEnableR, LOW);
+        analogWrite(this->pinMotorPWMR, 0);
         analogWrite(this->pinMotorPWML, this->value);
     }
 }
 
 void Ibt::setStop() {
-    digitalWrite(this->pinMotorEnableL, LOW);
-    digitalWrite(this->pinMotorEnableR, LOW);
+    digitalWrite(this->pinMotorEnable, LOW);
     analogWrite(this->pinMotorPWMR, 0);
     analogWrite(this->pinMotorPWML, 0);
 }

@@ -26,6 +26,7 @@ public:
     void menu();
     void readSerial();
     void testMotors();
+    void testSonar();
 
     int usePrintInfo; // print info
 

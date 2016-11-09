@@ -5,7 +5,7 @@
 #ifndef SEKI_DRIVERS_H
 #define SEKI_DRIVERS_H
 
-#define MAX_ECHO_TIME 3000
+#define MAX_ECHO_TIME 9000
 #define MIN_ECHO_TIME 300
 #define NO_ECHO 0
 

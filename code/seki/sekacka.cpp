@@ -9,37 +9,38 @@
 
 
 // ------ pins---------------------------------------
-#define pinMotorLeftEnableR 22     //  Forward drive left enable
-#define pinMotorLeftEnableL 24     //  backward drive left enable
+#define pinMotorLeftEnable 24     //  Forward drive left enable
 #define pinMotorLeftPWMR 2         //  Forward left motor PWM pin
 #define pinMotorLeftPWML 3         //  backward left motor PWM pin
 #define pinMotorLeftSense A0       //  left motor current sense
 
-#define pinMotorRightEnableR 26    // Forward drive right enable
-#define pinMotorRightEnableL 28    // backward drive right enable
+#define pinMotorRightEnable 28    // Forward drive right enable
 #define pinMotorRightPWMR 4        // Forward right motor PWM pin
 #define pinMotorRightPWML 5        // backward right motor PWM pin
 #define pinMotorRightSense A1      // Right motor current sense
 
 // ----- sonar ----------------------------------------
-#define pinSonarCenterTrigger 24   // sonar center Trigger
-#define pinSonarCenterEcho 22      // sonar center echo
+#define pinSonarCenterTrigger 11   // sonar center Trigger
+#define pinSonarCenterEcho 12      // sonar center echo
 
-#define pinSonarRightTrigger 30    // sonar right Trigger
-#define pinSonarRightEcho 32       // sonar right Echo
+#define pinSonarRightTrigger 34    // sonar right Trigger
+#define pinSonarRightEcho 36       // sonar right Echo
 
-#define pinSonarLeftTrigger 34     // sonar left Trigger
-#define pinSonarLeftEcho 36        // sonar left Echo
+#define pinSonarLeftTrigger 38     // sonar left Trigger
+#define pinSonarLeftEcho 40        // sonar left Echo
 
 // ------ orther  -----------------------------------------------
 #define pinLed 13                 // led info
 
 #define CONSOLE_BAUDRATE    19200       // baudrate used for console
+#define Console Serial
+//#define ESP8266port Serial2
+//#define Bluetooth Serial1
 
 // ----- inicializace motoru L,R
 //Ibt(int pinMotorLeftEnableR, int pinMotorEnableL, int pinMotorPWMR, int pinMotorPWML, int pinMotorSense);
-Ibt motorL(pinMotorLeftEnableR, pinMotorLeftEnableL, pinMotorLeftPWMR, pinMotorLeftPWML, pinMotorLeftSense);
-Ibt motorR(pinMotorRightEnableR, pinMotorRightEnableL, pinMotorRightPWMR, pinMotorRightPWML, pinMotorRightSense);
+Ibt motorL(pinMotorLeftEnable, pinMotorLeftPWMR, pinMotorLeftPWML, pinMotorLeftSense);
+Ibt motorR(pinMotorRightEnable, pinMotorRightPWMR, pinMotorRightPWML, pinMotorRightSense);
 
 
 Sekacka::Sekacka(){
@@ -54,20 +55,20 @@ Sekacka::Sekacka(){
     updateTimeMotor = 100;   // cas k update motor
     timeUpdateTime = 0;     //smycky k rozjizdeni
     timeRotage = 0;         // smycky k otoceni sekiho
-    timeRotageMotor = 500;  // kolik smycek "timeRotage" je zapotřebi k otoceni sekiho
+    timeRotageMotor = 25;  // kolik smycek "timeRotage" je zapotřebi k otoceni sekiho
 
     // sonar
-    sonarUse       = 0;      // use ultra sonic sensor?
+    sonarUse       = 1;      // use ultra sonic sensor?
     sonarLeftUse   = 0;      // use LEFT ultra sonic sensor
     sonarRightUse  = 0;      // use RIGHT ultra sonic sensor
-    sonarCenterUse = 0;      // use CENTER ultra sonic sensor
+    sonarCenterUse = 1;      // use CENTER ultra sonic sensor
 
     nextTimeSonar  = 0;      // cas dalsi aktualizace ultra sonic sensor
     sonarDistCenter = 0;     // vzdalenost senzor - prekazkou
     sonarDistRight = 0;      // vzdalenost senzor - prekazkou
     sonarDistLeft  = 0;      // vzdalenost senzor - prekazkou
-    distMin = 20;            // vzdalenost senzor - prekazkou kdy musi zastavit
-    distSlow = 80;           // vzdalenost senzor - prekazkou  kdy musi spomalit
+    distMin = 1000;            // vzdalenost senzor - prekazkou kdy musi zastavit
+    distSlow = 2000;           // vzdalenost senzor - prekazkou  kdy musi spomalit
 
 
     drive = false; // zapnuti pohybu
@@ -79,19 +80,17 @@ Sekacka::Sekacka(){
 
 void Sekacka::setup(){
     //set console
-    Serial.begin(CONSOLE_BAUDRATE);
-    Serial.println("SETUP");
+    Console.begin(CONSOLE_BAUDRATE);
+    Console.println("SETUP");
 
     // left wheel motor
-    pinMode(pinMotorLeftEnableR, OUTPUT);   digitalWrite(pinMotorLeftEnableR, LOW);
-    pinMode(pinMotorLeftEnableL, OUTPUT);   digitalWrite(pinMotorLeftEnableL, LOW);
+    pinMode(pinMotorLeftEnable, OUTPUT);   digitalWrite(pinMotorLeftEnable, LOW);
     pinMode(pinMotorLeftPWMR, OUTPUT);
     pinMode(pinMotorLeftPWML, OUTPUT);
     pinMode(pinMotorLeftSense, INPUT);
 
     // left wheel motor
-    pinMode(pinMotorRightEnableR, OUTPUT);   digitalWrite(pinMotorRightEnableR, LOW);
-    pinMode(pinMotorRightEnableL, OUTPUT);   digitalWrite(pinMotorRightEnableL, LOW);
+    pinMode(pinMotorRightEnable, OUTPUT);   digitalWrite(pinMotorRightEnable, LOW);
     pinMode(pinMotorRightPWMR, OUTPUT);
     pinMode(pinMotorRightPWML, OUTPUT);
     pinMode(pinMotorRightSense, INPUT);
@@ -111,10 +110,12 @@ void Sekacka::setup(){
     // motor Stop
     motorL.setStop();
     motorR.setStop();
-    Serial.println("Motors set STOP");
+    Console.println("Motors set STOP");
 
     //set time
     startTime = millis();
+    drive = true;
+    delay(5000);
 
 }
 
@@ -139,8 +140,15 @@ void Sekacka::loop(){
 void Sekacka::printInfo(){
     switch (usePrintInfo){
         case 1:
-            Serial.print("M1 - s - ");
-            Serial.println();
+            Console.print("M1 - V ");
+            Console.print(motorL.getValue());
+            Console.print(" S ");
+            Console.print(motorL.getSmer());
+            Console.print("   M2 - V ");
+            Console.print(motorR.getValue());
+            Console.print("  S  ");
+            Console.print(motorR.getSmer());
+            Console.println();
             break;
     }
 
@@ -185,29 +193,36 @@ int Sekacka::readSensor(char type){
 
 void Sekacka::motorUpdate(){
     timeUpdateTime++;
-
+    Console.println(sonarDistCenter);
     //zpomalení před překážkou
+    
     if(sonarDistCenter < distSlow && sonarDistCenter > distMin){
         motorL.setData(true,100);
         motorR.setData(true,100);
+    return;
     }
 
     // otočení
-    if(sonarDistCenter <= distMin || timeRotage > 0  && timeRotage < timeRotageMotor){
+    if(sonarDistCenter <= distMin &&  sonarDistCenter > 0 || timeRotage > 0  && timeRotage < timeRotageMotor){
+      if(timeRotage == 0){
+        motorL.setStop();
+        motorR.setStop();
+        delay(1000);
+        }
         timeRotage++;
         if(timeRotage < timeRotageMotor){
             motorR.setData(true, 50);
             motorL.setData(false, 50);
             timeUpdateTime = 0;
             return 0;
-        }
-    }else
+        }else
         timeRotage = 0;
+    }
 
     // pomalý rozjezd
-    if(timeUpdateTime < updateTimeMotor/10){
-        motorL.setData(true,map(timeUpdateTime,0,10,0,255));
-        motorR.setData(true,map(timeUpdateTime,0,10,0,255));
+    if(timeUpdateTime < updateTimeMotor/2){
+        motorL.setData(true,map(timeUpdateTime,0,50,0,255));
+        motorR.setData(true,map(timeUpdateTime,0,50,0,255));
     }else{
         motorL.setData(true,255);
         motorR.setData(true,255);
@@ -220,13 +235,13 @@ void Sekacka::motorUpdate(){
 
 
 
-////////    SERIAL /////////////////////////////////////////
+////////    Console /////////////////////////////////////////
 
 
 void Sekacka::readSerial() {
-    // serial input
-    if (Serial.available() > 0) {
-        char ch = (char)Serial.read();
+    // Console input
+    if (Console.available() > 0) {
+        char ch = (char)Console.read();
         switch (ch){
             case 'm':
                 menu();
@@ -243,8 +258,8 @@ void Sekacka::menu(){
     char ch;
     printMenu();
     while(true){
-        if (Serial.available() > 0) {
-            ch = (char)Serial.read();
+        if (Console.available() > 0) {
+            ch = (char)Console.read();
             switch (ch){
                 case '0':
                     return;
@@ -252,8 +267,18 @@ void Sekacka::menu(){
                     testMotors();
                     printMenu();
                     break;
+                case '2':
+                    testSonar();
+                    printMenu();
+                    break;
                 case 'D':
-                    testMotors();
+                    Console.println("SET drive TRUE");
+                    if(drive == true) drive = false;
+                    else drive = true;
+                    break;
+                case 'I':
+                    if(usePrintInfo == 0) usePrintInfo = 1;
+                    else usePrintInfo = 0;
                     printMenu();
                     break;
 
@@ -266,13 +291,14 @@ void Sekacka::menu(){
 
 
 void Sekacka::printMenu(){
-    Serial.println();
-    Serial.println(F(" MAIN MENU:"));
-    Serial.println(F("1=test motors"));
-    Serial.println(F("I=infoStart"));
-    Serial.println(F("D=start drive"));
-    Serial.println(F("0=exit"));
-    Serial.println();
+    Console.println();
+    Console.println(F(" MAIN MENU:"));
+    Console.println(F("1=test motors"));
+    Console.println(F("2=test sonar"));
+    Console.println(F("I=infoStart"));
+    Console.println(F("D=start drive"));
+    Console.println(F("0=exit"));
+    Console.println();
 }
 
 
@@ -281,26 +307,28 @@ void Sekacka::testMotors(){
     for (int i = 0; i < 256; i++) {
         motorR.setData(1,i);
         printInfo();
-        delay(200);
+        delay(100);
+        Console.println(i);
     }
     for (int i = 256; i > 0;i--) {
-        motorR.setData(0,i);
+        motorR.setData(1,i);
         printInfo();
-        delay(200);
+        delay(100);
+        Console.println(i);
     }
     motorR.setStop();
 
-    for (int i = 0; i < 256; i++) {
-        motorL.setData(1,i);
-        printInfo();
-        delay(200);
 
-    }
-    for (int i = 256; i > 0;i--) {
-        motorL.setData(0,i);
-        printInfo();
-        delay(200);
-    }
-    motorL.setStop();
 }
 
+void Sekacka::testSonar(){
+  char ch = "";
+    while(true) {
+         readSensors();
+         Console.println(sonarDistCenter);
+         if (Console.available() > 0) 
+            ch = (char)Console.read();
+         if(ch == "m")
+            return 0;
+    }
+}
