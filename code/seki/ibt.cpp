@@ -42,6 +42,7 @@ void Ibt::aplikovat() {
 }
 
 void Ibt::setStop() {
+    this->value = 0;
     digitalWrite(this->pinMotorEnable, LOW);
     analogWrite(this->pinMotorPWMR, 0);
     analogWrite(this->pinMotorPWML, 0);

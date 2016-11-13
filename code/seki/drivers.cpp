@@ -13,7 +13,7 @@ unsigned int readHCSR04(int triggerPin, int echoPin){
     delayMicroseconds(10);
     digitalWrite(triggerPin, LOW);
     uS = pulseIn(echoPin, HIGH, MAX_ECHO_TIME + 1000);
-    if (uS > MAX_ECHO_TIME) uS = NO_ECHO;
+    if (uS > MAX_ECHO_TIME) uS = 5000;
     else if (uS < MIN_ECHO_TIME) uS = NO_ECHO;
     return uS;
     //float distance = pulseIn(ECHOPIN, HIGH);

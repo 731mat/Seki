@@ -11,6 +11,19 @@ enum {
     SEN_SONAR_RIGHT,       // 0..SONAR_TRIGGER_DISTANCE
 };
 
+enum {
+    MOTOR_FRONT,
+    MOTOR_FRONT_POMALU,
+    MOTOR_FRONT_LEFT,
+    MOTOR_FRONT_RIGHT,
+    MOTOR_BACK,
+    MOTOR_BACK_LEFT,
+    MOTOR_BACK_RIGHT,
+    MOTOR_LEFT,
+    MOTOR_RIGHT,
+    MOTOR_STOP,
+};
+
 class Sekacka {
 public:
     Sekacka();
@@ -19,6 +32,7 @@ public:
     void printInfo();
     void readSensors(); // vyber druhu senzoru
     int readSensor(char type);   // vyber urciteho senzoru
+    void motorPohyb(char type);
     void motorUpdate();
 
     //serial
@@ -27,7 +41,8 @@ public:
     void readSerial();
     void testMotors();
     void testSonar();
-
+    // bluetooth
+    void readBluetooth();
     int usePrintInfo; // print info
 
     // time
@@ -41,6 +56,7 @@ public:
     int timeRotageMotor;
     // zapnuti pohybu
     bool drive;
+    char charBluetooth;
 
     // --------- sonar ----------------------------------
     // ultra sonic sensor distance-to-obstacle (cm)
@@ -56,6 +72,4 @@ public:
     int distMin;
     int distSlow;
 };
-
-
 #endif //SEKI_Seki_H

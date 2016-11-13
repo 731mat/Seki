@@ -5,8 +5,8 @@
 #ifndef SEKI_DRIVERS_H
 #define SEKI_DRIVERS_H
 
-#define MAX_ECHO_TIME 9000
-#define MIN_ECHO_TIME 300
+#define MAX_ECHO_TIME 5000
+#define MIN_ECHO_TIME 200
 #define NO_ECHO 0
 
 // sonar
