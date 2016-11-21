@@ -1,0 +1,129 @@
+\hypertarget{class_ibt}{}\section{Dokumentace třídy Ibt}
+\label{class_ibt}\index{Ibt@{Ibt}}
+\subsection*{Veřejné metody}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_ibt_a7095837f79f0d4329a6f44b54480c26e}{Ibt} (int \hyperlink{class_ibt_ad6d59ade8bcb80ee7ee06c475a381dea}{pin\+Motor\+Enable}, int \hyperlink{class_ibt_a7112beac87f2013be51d48203e23a1f5}{pin\+Motor\+P\+W\+MR}, int \hyperlink{class_ibt_a392b4ea56f7346c43b9562e77fe35722}{pin\+Motor\+P\+W\+ML}, int \hyperlink{class_ibt_ac52829806ce90d85f76320292e7027a4}{pin\+Motor\+Sense})
+\item 
+void \hyperlink{class_ibt_ad5096d0ae4d1d1ce3714868f2f4b3fec}{set\+Data} (bool \hyperlink{class_ibt_ab15472546c05e0760f6a1b282fad58fb}{smer}, int \hyperlink{class_ibt_a8e62674f6908473dc87800a656142d7c}{value})
+\item 
+void \hyperlink{class_ibt_ade1b0109381b41dc9cd254de475a6c16}{set\+Stop} ()
+\item 
+void \hyperlink{class_ibt_abf510206cd1ab3c5067fd1662a1e63f2}{aplikovat} ()
+\item 
+bool \hyperlink{class_ibt_ad1c2a7fa28e908578fa73f1978c3f0c5}{get\+Smer} ()
+\item 
+int \hyperlink{class_ibt_ab4b9fec5dcc3520653d1d42482a36f80}{get\+Value} ()
+\end{DoxyCompactItemize}
+\subsection*{Privátní atributy}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{class_ibt_ad6d59ade8bcb80ee7ee06c475a381dea}{pin\+Motor\+Enable}
+\item 
+int \hyperlink{class_ibt_a392b4ea56f7346c43b9562e77fe35722}{pin\+Motor\+P\+W\+ML}
+\item 
+int \hyperlink{class_ibt_a7112beac87f2013be51d48203e23a1f5}{pin\+Motor\+P\+W\+MR}
+\item 
+int \hyperlink{class_ibt_ac52829806ce90d85f76320292e7027a4}{pin\+Motor\+Sense}
+\item 
+bool \hyperlink{class_ibt_ab15472546c05e0760f6a1b282fad58fb}{smer}
+\item 
+int \hyperlink{class_ibt_a8e62674f6908473dc87800a656142d7c}{value}
+\end{DoxyCompactItemize}
+
+
+\subsection{Dokumentace konstruktoru a destruktoru}
+\index{Ibt@{Ibt}!Ibt@{Ibt}}
+\index{Ibt@{Ibt}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{Ibt(int pin\+Motor\+Enable, int pin\+Motor\+P\+W\+M\+R, int pin\+Motor\+P\+W\+M\+L, int pin\+Motor\+Sense)}{Ibt(int pinMotorEnable, int pinMotorPWMR, int pinMotorPWML, int pinMotorSense)}}]{\setlength{\rightskip}{0pt plus 5cm}Ibt\+::\+Ibt (
+\begin{DoxyParamCaption}
+\item[{int}]{pin\+Motor\+Enable, }
+\item[{int}]{pin\+Motor\+P\+W\+MR, }
+\item[{int}]{pin\+Motor\+P\+W\+ML, }
+\item[{int}]{pin\+Motor\+Sense}
+\end{DoxyParamCaption}
+)}\hypertarget{class_ibt_a7095837f79f0d4329a6f44b54480c26e}{}\label{class_ibt_a7095837f79f0d4329a6f44b54480c26e}
+A constructor. 
+\begin{DoxyParams}{Parametry}
+{\em pin\+Motor\+Left\+Enable} & pin na kterém je enable \\
+\hline
+{\em pin\+Motor\+P\+W\+ML} & pin na který budeme posílat P\+WM pro jízdu jedním směrem \\
+\hline
+{\em pin\+Motor\+P\+W\+MR} & pin na který budeme posílat P\+WM pro jízdu druhým směrem \\
+\hline
+{\em pin\+Motor\+Sense} & pin kterým probíhá čtení aktuálního proudu regulátoru \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Dokumentace k metodám}
+\index{Ibt@{Ibt}!aplikovat@{aplikovat}}
+\index{aplikovat@{aplikovat}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{aplikovat()}{aplikovat()}}]{\setlength{\rightskip}{0pt plus 5cm}void Ibt\+::aplikovat (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_ibt_abf510206cd1ab3c5067fd1662a1e63f2}{}\label{class_ibt_abf510206cd1ab3c5067fd1662a1e63f2}
+Metoda která aplikuje privátní proměnné k danému výstupu. \index{Ibt@{Ibt}!get\+Smer@{get\+Smer}}
+\index{get\+Smer@{get\+Smer}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{get\+Smer()}{getSmer()}}]{\setlength{\rightskip}{0pt plus 5cm}bool Ibt\+::get\+Smer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_ibt_ad1c2a7fa28e908578fa73f1978c3f0c5}{}\label{class_ibt_ad1c2a7fa28e908578fa73f1978c3f0c5}
+Metoda vypisuje členská data S\+M\+ER \index{Ibt@{Ibt}!get\+Value@{get\+Value}}
+\index{get\+Value@{get\+Value}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{get\+Value()}{getValue()}}]{\setlength{\rightskip}{0pt plus 5cm}int Ibt\+::get\+Value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_ibt_ab4b9fec5dcc3520653d1d42482a36f80}{}\label{class_ibt_ab4b9fec5dcc3520653d1d42482a36f80}
+Metoda vypisuje členská data V\+A\+L\+UE \index{Ibt@{Ibt}!set\+Data@{set\+Data}}
+\index{set\+Data@{set\+Data}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{set\+Data(bool smer, int value)}{setData(bool smer, int value)}}]{\setlength{\rightskip}{0pt plus 5cm}void Ibt\+::set\+Data (
+\begin{DoxyParamCaption}
+\item[{bool}]{smer, }
+\item[{int}]{value}
+\end{DoxyParamCaption}
+)}\hypertarget{class_ibt_ad5096d0ae4d1d1ce3714868f2f4b3fec}{}\label{class_ibt_ad5096d0ae4d1d1ce3714868f2f4b3fec}
+Metoda která nadstavuje privátní proměnné třídy 
+\begin{DoxyParams}{Parametry}
+{\em směr} & type bool -\/ 1 vpřed -\/ 0 vzad \\
+\hline
+{\em value} & type int hodnota výstupního proudu z regulátoru v P\+WM od 0 do 255 \\
+\hline
+\end{DoxyParams}
+\index{Ibt@{Ibt}!set\+Stop@{set\+Stop}}
+\index{set\+Stop@{set\+Stop}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{set\+Stop()}{setStop()}}]{\setlength{\rightskip}{0pt plus 5cm}void Ibt\+::set\+Stop (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_ibt_ade1b0109381b41dc9cd254de475a6c16}{}\label{class_ibt_ade1b0109381b41dc9cd254de475a6c16}
+Metoda která nastaví privátní proměnné pro pohyb na 0 a směr 0 
+
+\subsection{Dokumentace k datovým členům}
+\index{Ibt@{Ibt}!pin\+Motor\+Enable@{pin\+Motor\+Enable}}
+\index{pin\+Motor\+Enable@{pin\+Motor\+Enable}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{pin\+Motor\+Enable}{pinMotorEnable}}]{\setlength{\rightskip}{0pt plus 5cm}int Ibt\+::pin\+Motor\+Enable\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_ibt_ad6d59ade8bcb80ee7ee06c475a381dea}{}\label{class_ibt_ad6d59ade8bcb80ee7ee06c475a381dea}
+na kterém pinu se nachází enable \index{Ibt@{Ibt}!pin\+Motor\+P\+W\+ML@{pin\+Motor\+P\+W\+ML}}
+\index{pin\+Motor\+P\+W\+ML@{pin\+Motor\+P\+W\+ML}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{pin\+Motor\+P\+W\+ML}{pinMotorPWML}}]{\setlength{\rightskip}{0pt plus 5cm}int Ibt\+::pin\+Motor\+P\+W\+ML\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_ibt_a392b4ea56f7346c43b9562e77fe35722}{}\label{class_ibt_a392b4ea56f7346c43b9562e77fe35722}
+pin na který se aplikuje pwm pro jízdu jedním směrem \index{Ibt@{Ibt}!pin\+Motor\+P\+W\+MR@{pin\+Motor\+P\+W\+MR}}
+\index{pin\+Motor\+P\+W\+MR@{pin\+Motor\+P\+W\+MR}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{pin\+Motor\+P\+W\+MR}{pinMotorPWMR}}]{\setlength{\rightskip}{0pt plus 5cm}int Ibt\+::pin\+Motor\+P\+W\+MR\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_ibt_a7112beac87f2013be51d48203e23a1f5}{}\label{class_ibt_a7112beac87f2013be51d48203e23a1f5}
+pin na který se aplikuje pwm pro jízdu druhým směrem \index{Ibt@{Ibt}!pin\+Motor\+Sense@{pin\+Motor\+Sense}}
+\index{pin\+Motor\+Sense@{pin\+Motor\+Sense}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{pin\+Motor\+Sense}{pinMotorSense}}]{\setlength{\rightskip}{0pt plus 5cm}int Ibt\+::pin\+Motor\+Sense\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_ibt_ac52829806ce90d85f76320292e7027a4}{}\label{class_ibt_ac52829806ce90d85f76320292e7027a4}
+pin na kterém měříme hodnotu napětí na regulátoru \index{Ibt@{Ibt}!smer@{smer}}
+\index{smer@{smer}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{smer}{smer}}]{\setlength{\rightskip}{0pt plus 5cm}bool Ibt\+::smer\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_ibt_ab15472546c05e0760f6a1b282fad58fb}{}\label{class_ibt_ab15472546c05e0760f6a1b282fad58fb}
+směr jízdy 1,0 \index{Ibt@{Ibt}!value@{value}}
+\index{value@{value}!Ibt@{Ibt}}
+\subsubsection[{\texorpdfstring{value}{value}}]{\setlength{\rightskip}{0pt plus 5cm}int Ibt\+::value\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_ibt_a8e62674f6908473dc87800a656142d7c}{}\label{class_ibt_a8e62674f6908473dc87800a656142d7c}
+hodnota P\+WM od 0 do 255 
+
+Dokumentace pro tuto třídu byla generována z následujících souborů\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ibt_8h}{ibt.\+h}\item 
+ibt.\+cpp\end{DoxyCompactItemize}

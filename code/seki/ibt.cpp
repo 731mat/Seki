@@ -14,7 +14,7 @@ Ibt::Ibt(int pinMotorEnable, int pinMotorPWMR, int pinMotorPWML, int pinMotorSen
 
 void Ibt::setData(bool smer, int value) {
     if(smer == this->smer && value == this->value)
-        return 0;
+        return;
 
     this->smer = smer;
     if(value >= 0 && value <= 255)

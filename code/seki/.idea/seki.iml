@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/Debug/seki_seki.ino.cpp">
-      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/Debug/seki_seki.ino.cpp" isTestSource="false" />
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/Debug/seki_seki.ino.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/Debug/seki_seki.ino.cpp" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/MinSizeRel/seki_seki.ino.cpp">
-      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/MinSizeRel/seki_seki.ino.cpp" isTestSource="false" />
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/MinSizeRel/seki_seki.ino.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/MinSizeRel/seki_seki.ino.cpp" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/RelWithDebInfo/seki_seki.ino.cpp">
-      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/RelWithDebInfo/seki_seki.ino.cpp" isTestSource="false" />
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/RelWithDebInfo/seki_seki.ino.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/RelWithDebInfo/seki_seki.ino.cpp" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/Release/seki_seki.ino.cpp">
-      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-84f464fd/84f464fd/Release/seki_seki.ino.cpp" isTestSource="false" />
+    <content url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/Release/seki_seki.ino.cpp">
+      <sourceFolder url="file://$USER_HOME$/.CLion2016.2/system/cmake/generated/seki-6de5afca/6de5afca/Release/seki_seki.ino.cpp" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/seki.ino" isTestSource="false" />
@@ -87,16 +87,16 @@
           <root url="file:///usr/share/arduino/hardware/arduino/variants/standard" />
           <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino" />
           <root url="file:///usr/lib/avr/include" />
-          <root url="file:///usr/lib/gcc/avr/4.9.2/include" />
           <root url="file:///usr/lib/gcc/avr/4.9.2/include-fixed" />
+          <root url="file:///usr/lib/gcc/avr/4.9.2/include" />
         </CLASSES>
         <SOURCES>
           <root url="file:///usr/share/arduino/libraries" />
           <root url="file:///usr/share/arduino/hardware/arduino/variants/standard" />
           <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino" />
           <root url="file:///usr/lib/avr/include" />
-          <root url="file:///usr/lib/gcc/avr/4.9.2/include" />
           <root url="file:///usr/lib/gcc/avr/4.9.2/include-fixed" />
+          <root url="file:///usr/lib/gcc/avr/4.9.2/include" />
         </SOURCES>
         <excluded>
           <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/CDC.cpp" />

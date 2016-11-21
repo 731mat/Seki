@@ -1,0 +1,105 @@
+\hypertarget{class_bluetooth}{}\section{Dokumentace třídy Bluetooth}
+\label{class_bluetooth}\index{Bluetooth@{Bluetooth}}
+\subsection*{Veřejné metody}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_bluetooth_adff22f9e5f2bd81b1fc5b8eeba71f68b}{Bluetooth} ()
+\item 
+void \hyperlink{class_bluetooth_a2d038a039804b49420b4361dadca5f03}{write\+BT} (String s)
+\item 
+char \hyperlink{class_bluetooth_acf117626c09166fa644283fab63b91e0}{read\+BT} ()
+\item 
+void \hyperlink{class_bluetooth_aac43de4109654ffd008a4ad10a7073b1}{set\+Name} (String name)
+\item 
+void \hyperlink{class_bluetooth_aca52b5e2fd06c4868a8f17ef5c3d6e20}{set\+Pin} (int pin)
+\item 
+bool \hyperlink{class_bluetooth_a32206b7170e65b05b30999d8c628f81e}{is\+Con} ()
+\end{DoxyCompactItemize}
+\subsection*{Privátní atributy}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{class_bluetooth_adef51eff78a48180af18bb59bbfe9702}{bt\+Data}
+\item 
+long \hyperlink{class_bluetooth_a4c50a5cea29bb234f37aba4c8632d0b2}{bt\+Rate}
+\end{DoxyCompactItemize}
+
+
+\subsection{Dokumentace konstruktoru a destruktoru}
+\index{Bluetooth@{Bluetooth}!Bluetooth@{Bluetooth}}
+\index{Bluetooth@{Bluetooth}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{Bluetooth()}{Bluetooth()}}]{\setlength{\rightskip}{0pt plus 5cm}Bluetooth\+::\+Bluetooth (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_bluetooth_adff22f9e5f2bd81b1fc5b8eeba71f68b}{}\label{class_bluetooth_adff22f9e5f2bd81b1fc5b8eeba71f68b}
+A constructor 
+
+\subsection{Dokumentace k metodám}
+\index{Bluetooth@{Bluetooth}!is\+Con@{is\+Con}}
+\index{is\+Con@{is\+Con}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{is\+Con()}{isCon()}}]{\setlength{\rightskip}{0pt plus 5cm}bool Bluetooth\+::is\+Con (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_bluetooth_a32206b7170e65b05b30999d8c628f81e}{}\label{class_bluetooth_a32206b7170e65b05b30999d8c628f81e}
+Metoda vrací zda je serial avaible \begin{DoxyReturn}{Návratová hodnota}
+bool je serial aveible 
+\end{DoxyReturn}
+\index{Bluetooth@{Bluetooth}!read\+BT@{read\+BT}}
+\index{read\+BT@{read\+BT}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{read\+B\+T()}{readBT()}}]{\setlength{\rightskip}{0pt plus 5cm}char Bluetooth\+::read\+BT (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_bluetooth_acf117626c09166fa644283fab63b91e0}{}\label{class_bluetooth_acf117626c09166fa644283fab63b91e0}
+Metoda čte seriovou linku \index{Bluetooth@{Bluetooth}!set\+Name@{set\+Name}}
+\index{set\+Name@{set\+Name}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{set\+Name(\+String name)}{setName(String name)}}]{\setlength{\rightskip}{0pt plus 5cm}void Bluetooth\+::set\+Name (
+\begin{DoxyParamCaption}
+\item[{String}]{name}
+\end{DoxyParamCaption}
+)}\hypertarget{class_bluetooth_aac43de4109654ffd008a4ad10a7073b1}{}\label{class_bluetooth_aac43de4109654ffd008a4ad10a7073b1}
+Metoda nastaví jméno modulu H\+C-\/06 
+\begin{DoxyParams}{Parametry}
+{\em name} & type String nazev bluetooth modulu \\
+\hline
+\end{DoxyParams}
+\index{Bluetooth@{Bluetooth}!set\+Pin@{set\+Pin}}
+\index{set\+Pin@{set\+Pin}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{set\+Pin(int pin)}{setPin(int pin)}}]{\setlength{\rightskip}{0pt plus 5cm}void Bluetooth\+::set\+Pin (
+\begin{DoxyParamCaption}
+\item[{int}]{pin}
+\end{DoxyParamCaption}
+)}\hypertarget{class_bluetooth_aca52b5e2fd06c4868a8f17ef5c3d6e20}{}\label{class_bluetooth_aca52b5e2fd06c4868a8f17ef5c3d6e20}
+Metoda nastaví pin modulu H\+C-\/06 
+\begin{DoxyParams}{Parametry}
+{\em pin} & type int heslo pro bluetooth modul \\
+\hline
+\end{DoxyParams}
+\index{Bluetooth@{Bluetooth}!write\+BT@{write\+BT}}
+\index{write\+BT@{write\+BT}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{write\+B\+T(\+String s)}{writeBT(String s)}}]{\setlength{\rightskip}{0pt plus 5cm}void Bluetooth\+::write\+BT (
+\begin{DoxyParamCaption}
+\item[{String}]{s}
+\end{DoxyParamCaption}
+)}\hypertarget{class_bluetooth_a2d038a039804b49420b4361dadca5f03}{}\label{class_bluetooth_a2d038a039804b49420b4361dadca5f03}
+Metoda která zapisuje hodnotu v parametru na seriovou linku připojenou k bloutooth modulu 
+\begin{DoxyParams}{Parametry}
+{\em s} & type string string se vypíše na seriovou linku \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Dokumentace k datovým členům}
+\index{Bluetooth@{Bluetooth}!bt\+Data@{bt\+Data}}
+\index{bt\+Data@{bt\+Data}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{bt\+Data}{btData}}]{\setlength{\rightskip}{0pt plus 5cm}char Bluetooth\+::bt\+Data\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_bluetooth_adef51eff78a48180af18bb59bbfe9702}{}\label{class_bluetooth_adef51eff78a48180af18bb59bbfe9702}
+proměnná pro čtení z seriové liky \index{Bluetooth@{Bluetooth}!bt\+Rate@{bt\+Rate}}
+\index{bt\+Rate@{bt\+Rate}!Bluetooth@{Bluetooth}}
+\subsubsection[{\texorpdfstring{bt\+Rate}{btRate}}]{\setlength{\rightskip}{0pt plus 5cm}long Bluetooth\+::bt\+Rate\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{class_bluetooth_a4c50a5cea29bb234f37aba4c8632d0b2}{}\label{class_bluetooth_a4c50a5cea29bb234f37aba4c8632d0b2}
+hodnota bychlosti seriové liky pro modul bluetooth 
+
+Dokumentace pro tuto třídu byla generována z následujících souborů\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{bluetooth_8h}{bluetooth.\+h}\item 
+bluetooth.\+cpp\end{DoxyCompactItemize}

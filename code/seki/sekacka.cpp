@@ -21,14 +21,18 @@
 #define pinMotorRightSense A1      // Right motor current sense
 
 // ----- sonar ----------------------------------------
-#define pinSonarCenterTrigger 11   // sonar center Trigger
-#define pinSonarCenterEcho 12      // sonar center echo
+#define pinSonarCenterLeftTrigger 11   // sonar center Trigger
+#define pinSonarCenterLeftEcho 12      // sonar center echo
 
-#define pinSonarRightTrigger 34    // sonar right Trigger
-#define pinSonarRightEcho 36       // sonar right Echo
+#define pinSonarCenterRightTrigger 13   // sonar center Trigger
+#define pinSonarCenterRightEcho 8      // sonar center echo
 
 #define pinSonarLeftTrigger 38     // sonar left Trigger
 #define pinSonarLeftEcho 40        // sonar left Echo
+
+#define pinSonarRightTrigger 39    // sonar left Trigger
+#define pinSonarRightEcho 37       // sonar left Echo
+
 
 // ------ orther  -----------------------------------------------
 #define pinLed 13                 // led info
@@ -38,8 +42,6 @@
 //#define ESP8266port Serial2
 //#define Bluetooth Serial1
 
-// ----- inicializace motoru L,R
-//Ibt(int pinMotorLeftEnableR, int pinMotorEnableL, int pinMotorPWMR, int pinMotorPWML, int pinMotorSense);
 Ibt motorL(pinMotorLeftEnable, pinMotorLeftPWMR, pinMotorLeftPWML, pinMotorLeftSense);
 Ibt motorR(pinMotorRightEnable, pinMotorRightPWMR, pinMotorRightPWML, pinMotorRightSense);
 Bluetooth bt;
@@ -63,10 +65,12 @@ Sekacka::Sekacka(){
     sonarUse       = 1;      // use ultra sonic sensor?
     sonarLeftUse   = 0;      // use LEFT ultra sonic sensor
     sonarRightUse  = 0;      // use RIGHT ultra sonic sensor
-    sonarCenterUse = 1;      // use CENTER ultra sonic sensor
+    sonarCenterLeftUse = 1;      // use CENTER ultra sonic sensor
+    sonarCenterRightUse = 1;      // use CENTER ultra sonic sensor
 
     nextTimeSonar  = 0;      // cas dalsi aktualizace ultra sonic sensor
-    sonarDistCenter = 0;     // vzdalenost senzor - prekazkou
+    sonarDistCenterLeft = 0;     // vzdalenost senzor - prekazkou
+    sonarDistCenterRight = 0;     // vzdalenost senzor - prekazkou
     sonarDistRight = 0;      // vzdalenost senzor - prekazkou
     sonarDistLeft  = 0;      // vzdalenost senzor - prekazkou
     distMin = 1000;            // vzdalenost senzor - prekazkou kdy musi zastavit
@@ -74,7 +78,7 @@ Sekacka::Sekacka(){
 
 
     drive = false; // zapnuti pohybu
-    charBluetooth = "S";
+    charBluetooth = 'S';
 
 
 }
@@ -98,8 +102,10 @@ void Sekacka::setup(){
     pinMode(pinMotorRightSense, INPUT);
 
     // sonar
-    pinMode(pinSonarCenterTrigger, OUTPUT);
-    pinMode(pinSonarCenterEcho, INPUT);
+    pinMode(pinSonarCenterLeftTrigger, OUTPUT);
+    pinMode(pinSonarCenterLeftEcho, INPUT);
+    pinMode(pinSonarCenterRightTrigger, OUTPUT);
+    pinMode(pinSonarCenterRightEcho, INPUT);
     pinMode(pinSonarLeftTrigger, OUTPUT);
     pinMode(pinSonarLeftEcho, INPUT);
     pinMode(pinSonarRightTrigger, OUTPUT);
@@ -156,7 +162,7 @@ void Sekacka::printInfo(){
             Console.print("  S  ");
             Console.print(motorR.getSmer());
             Console.print("  CENTER:");
-            Console.print(sonarDistCenter);
+            Console.print(sonarDistCenterLeft);
             Console.println();
             break;
     }
@@ -175,10 +181,14 @@ void Sekacka::readSensors() {
                 break;
             case SEN_SONAR_LEFT:
                 if (sonarLeftUse) sonarDistLeft = readSensor(SEN_SONAR_LEFT);
-                senSonarTurn = SEN_SONAR_CENTER;
+                senSonarTurn = SEN_SONAR_CENTER_LEFT;
                 break;
-            case SEN_SONAR_CENTER:
-                if (sonarCenterUse) sonarDistCenter = readSensor(SEN_SONAR_CENTER);
+            case SEN_SONAR_CENTER_LEFT:
+                if (sonarCenterLeftUse) sonarDistCenterLeft = readSensor(SEN_SONAR_CENTER_LEFT);
+                senSonarTurn = SEN_SONAR_CENTER_RIGHT;
+                break;
+            case SEN_SONAR_CENTER_RIGHT:
+                if (sonarCenterRightUse) sonarDistCenterRight = readSensor(SEN_SONAR_CENTER_RIGHT);
                 senSonarTurn = SEN_SONAR_RIGHT;
                 break;
             default:
@@ -189,12 +199,31 @@ void Sekacka::readSensors() {
 }
 
 int Sekacka::readSensor(char type){
-  //Console.println(readHCSR04(pinSonarCenterTrigger, pinSonarCenterEcho));
     switch (type) {
 // sonar---------------------------------------------------------------------------------------------------
-        case SEN_SONAR_CENTER: return(readHCSR04(pinSonarCenterTrigger, pinSonarCenterEcho)); break;
+        case SEN_SONAR_CENTER_LEFT: return(readHCSR04(pinSonarCenterLeftTrigger, pinSonarCenterLeftEcho)); break;
+        case SEN_SONAR_CENTER_RIGHT: return(readHCSR04(pinSonarCenterRightTrigger, pinSonarCenterRightEcho)); break;
         case SEN_SONAR_LEFT: return(readHCSR04(pinSonarLeftTrigger, pinSonarLeftEcho)); break;
         case SEN_SONAR_RIGHT: return(readHCSR04(pinSonarRightTrigger, pinSonarRightEcho)); break;
+    }
+    return 0;
+}
+
+bool Sekacka::sonarMuzu(char type){
+    switch (type) {
+        case FRONT:
+            if(sonarDistCenterLeft > distSlow && sonarDistCenterRight > distSlow || sonarDistCenterLeft == 0 && sonarDistCenterRight == 0)
+                return 1;
+            break;
+        case FRONT_SLOW:
+            if(sonarDistCenterLeft < distSlow && sonarDistCenterLeft > distMin &&
+               sonarDistCenterRight < distSlow && sonarDistCenterRight > distMin)
+                return 1;
+            break;
+        case LEFT:
+            if(sonarDistLeft < distSlow && sonarDistLeft > distMin)
+                return 1;
+            break;
     }
     return 0;
 }
@@ -204,31 +233,31 @@ void Sekacka::motorUpdate(){
     if(bt.isCon()){
       switch(charBluetooth){
           case 'F':
-              motorPohyb(MOTOR_FRONT);
+              motorPohyb(MOTOR_FRONT, 100);
               return 0;
           case 'B':
-              motorPohyb(MOTOR_BACK);
+              motorPohyb(MOTOR_BACK, 0);
               return 0;
           case 'L':
-              motorPohyb(MOTOR_LEFT);
+              motorPohyb(MOTOR_LEFT, 0);
               return 0;
           case 'R':
-              motorPohyb(MOTOR_RIGHT);
+              motorPohyb(MOTOR_RIGHT, 0);
               return 0;
           case 'S':
-              motorPohyb(MOTOR_STOP);
+              motorPohyb(MOTOR_STOP, 0);
               return 0;
           case 'G':  // frontLEFT
-              motorPohyb(MOTOR_FRONT_LEFT);
+              motorPohyb(MOTOR_FRONT_LEFT, 0);
               return 0;
           case 'I':   // frontRIGHT
-              motorPohyb(MOTOR_FRONT_RIGHT);
+              motorPohyb(MOTOR_FRONT_RIGHT, 0);
               return 0;
           case 'H':  // backLEFT
-              motorPohyb(MOTOR_BACK_LEFT);
+              motorPohyb(MOTOR_BACK_LEFT, 0);
               return 0;
           case 'J':  // backRIGHT
-              motorPohyb(MOTOR_BACK_RIGHT);
+              motorPohyb(MOTOR_BACK_RIGHT, 0);
               return 0;
       }
       timeUpdateTime = 0;
@@ -239,19 +268,19 @@ void Sekacka::motorUpdate(){
     
     //zpomalení před překážkou
     
-    if(sonarDistCenter < distSlow && sonarDistCenter > distMin && timeRotage == 0){
-        motorPohyb(MOTOR_FRONT_POMALU);
+    if(sonarMuzu(FRONT_SLOW) && timeRotage == 0){
+        motorPohyb(MOTOR_FRONT, 50);
     return;
     }
 
     // otočení
-    if(sonarDistCenter <= distMin &&  sonarDistCenter > 0 || timeRotage > 0  && timeRotage < timeRotageMotor){
+    if(sonarMuzu(STOP) || timeRotage > 0  && timeRotage < timeRotageMotor){
       if(timeRotage == 0){
-        motorPohyb(MOTOR_STOP);
+        motorPohyb(MOTOR_STOP,0);
         delay(500);
       }
         timeRotage++;
-        motorPohyb(MOTOR_LEFT);
+        motorPohyb(MOTOR_LEFT,0);
         timeUpdateTime = 0;
         return 0;
     }else
@@ -259,20 +288,22 @@ void Sekacka::motorUpdate(){
 
     // pomalý rozjezd
         if(timeUpdateTime < updateTimeMotor/2){
-            motorL.setData(true,map(timeUpdateTime,0,50,0,255));
-            motorR.setData(true,map(timeUpdateTime,0,50,0,255));
+            motorPohyb(MOTOR_FRONT, map(timeUpdateTime,0,50,0,100));
         }else{
-            motorPohyb(MOTOR_FRONT);
+            motorPohyb(MOTOR_FRONT, 100);
         }
 }
 
 
-void Sekacka::motorPohyb(char type){
+
+// char type - enum
+// int value - od 0 do 100
+
+void Sekacka::motorPohyb(char type, int value = 0){
     switch (type) {
         case MOTOR_FRONT:
-            motorL.setData(true,255);
-            motorR.setData(true,255);
-            break;
+            motorL.setData(true,map(value, 0,100,0,255));
+            motorR.setData(true,map(value, 0,100,0,255));
         case MOTOR_FRONT_LEFT:
             motorL.setData(true, 128);
             motorR.setData(true, 255);
@@ -281,11 +312,6 @@ void Sekacka::motorPohyb(char type){
             motorL.setData(true, 255);
             motorR.setData(true, 128);
             break;
-        case MOTOR_FRONT_POMALU:
-            motorL.setData(true,100);
-            motorR.setData(true,100);
-            break;
-
         case MOTOR_BACK:
             motorR.setData(false, 255);
             motorL.setData(false, 255);
@@ -420,7 +446,7 @@ void Sekacka::testSonar(){
   char ch = "";
     while(true) {
          readSensors();
-         Console.println(sonarDistCenter);
+         Console.println(sonarDistCenterLeft);
          if (Console.available() > 0) 
             ch = (char)Console.read();
          if(ch == "m")

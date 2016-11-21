@@ -23,9 +23,6 @@ void Bluetooth::setPin(int pin){
     Serial.print(pin);
     Serial.println(F("..."));
     writeBT("AT+PIN"+String(pin));
-    res = (btResult.startsWith("OKsetPIN"));
-    if (res) Serial.println(F("=>success"));
-    else Serial.println(F("=>error setting pin"));
 }
 
 void Bluetooth::setName(String name){
