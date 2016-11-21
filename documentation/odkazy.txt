@@ -18,4 +18,5 @@ http://wiki.ardumower.de/index.php?title=Datei:BTS7960B_HBridgemontage-635056137
 https://wingoodharry.wordpress.com/2014/04/15/android-sendreceive-data-with-arduino-using-bluetooth-part-2/
 
 
-// dodělat bluetooth
+// arduino přerušení
+https://www.arduino.cc/en/Reference/AttachInterrupt

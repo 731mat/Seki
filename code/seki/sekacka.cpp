@@ -33,6 +33,12 @@
 #define pinSonarRightTrigger 39    // sonar left Trigger
 #define pinSonarRightEcho 37       // sonar left Echo
 
+// ---- bumper --------------------------------------
+#define pinBumperFront A10
+#define pinBumperBack A11
+#define pinBumperLeft A12
+#define pinBumperRight A13
+
 
 // ------ orther  -----------------------------------------------
 #define pinLed 13                 // led info
@@ -61,6 +67,12 @@ Sekacka::Sekacka(){
     timeRotage = 0;         // smycky k otoceni sekiho
     timeRotageMotor = 25;  // kolik smycek "timeRotage" je zapotřebi k otoceni sekiho
 
+    // bumper
+    bumperUse       = 0;      // use bumper?
+    bumperCenterUse   = 0;      // use CENTER
+    bumperLeftUse   = 0;      // use LEFT
+    bumperRightUse  = 0;      // use RIGHT
+
     // sonar
     sonarUse       = 1;      // use ultra sonic sensor?
     sonarLeftUse   = 0;      // use LEFT ultra sonic sensor
@@ -79,6 +91,8 @@ Sekacka::Sekacka(){
 
     drive = false; // zapnuti pohybu
     charBluetooth = 'S';
+
+    bumperNaraz = false;
 
 
 }
@@ -111,6 +125,21 @@ void Sekacka::setup(){
     pinMode(pinSonarRightTrigger, OUTPUT);
     pinMode(pinSonarRightEcho, INPUT);
 
+    // bumper
+    pinMode(pinBumperFront, INPUT_PULLUP);
+    pinMode(pinBumperBack, INPUT_PULLUP);
+    pinMode(pinBumperLeft, INPUT_PULLUP);
+    pinMode(pinBumperRight, INPUT_PULLUP);
+
+
+
+    attachInterrupt(pinBumperBack, naraz, CHANGE);
+    attachInterrupt(pinBumperFront, naraz, CHANGE);
+    attachInterrupt(pinBumperLeft, naraz, CHANGE);
+    attachInterrupt(pinBumperRight, naraz, CHANGE);
+
+
+
     // led
     pinMode(pinLed, OUTPUT);
     digitalWrite(pinLed, LOW);
@@ -127,6 +156,11 @@ void Sekacka::setup(){
     drive = true;
     //delay(5000);
 
+}
+
+void Sekacka::naraz(){
+    motorPohyb(MOTOR_STOP,0);
+    bumperNaraz = !bumperNaraz;
 }
 
 void Sekacka::loop(){

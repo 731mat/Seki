@@ -86,6 +86,16 @@ private:
     void readBluetooth();
 
     /**
+     * metoda která reaguje ma přerušení
+     */
+    void naraz();
+
+    /**
+     * náraz potvrzení
+     */
+    bool bumperNaraz;
+
+    /**
     * a private variable.
     * proměnná která zařizuje druh výpisu na Consoli
     */
@@ -131,6 +141,25 @@ private:
     *  Bluetooth výstup pro manuální ovladani
     */
     char charBluetooth;
+
+
+    // --------- bumper ---------------------------------
+    /**
+    *  použití bumper k pohybu
+    */
+    char bumperUse;
+    /**
+    *  použití bumper center
+    */
+    char bumperCenterUse;
+    /**
+    *  použití bumper left
+    */
+    char bumperLeftUse;
+    /**
+    *  použití bumper right
+    */
+    char bumperRightUse;
 
 
     // --------- sonar ----------------------------------
