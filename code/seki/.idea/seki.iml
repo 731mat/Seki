@@ -83,43 +83,15 @@
     <orderEntry type="module-library">
       <library name="Header Search Paths">
         <CLASSES>
-          <root url="file:///usr/share/arduino/libraries" />
-          <root url="file:///usr/share/arduino/hardware/arduino/variants/standard" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino" />
           <root url="file:///usr/lib/avr/include" />
           <root url="file:///usr/lib/gcc/avr/4.9.2/include-fixed" />
           <root url="file:///usr/lib/gcc/avr/4.9.2/include" />
         </CLASSES>
         <SOURCES>
-          <root url="file:///usr/share/arduino/libraries" />
-          <root url="file:///usr/share/arduino/hardware/arduino/variants/standard" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino" />
           <root url="file:///usr/lib/avr/include" />
           <root url="file:///usr/lib/gcc/avr/4.9.2/include-fixed" />
           <root url="file:///usr/lib/gcc/avr/4.9.2/include" />
         </SOURCES>
-        <excluded>
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/CDC.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/avr-libc/malloc.c" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/avr-libc/realloc.c" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/HID.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/Print.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/HardwareSerial.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/Tone.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/wiring_analog.c" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/USBCore.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/WString.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/wiring_pulse.c" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/wiring_shift.c" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/Stream.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/new.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/IPAddress.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/main.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/WMath.cpp" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/wiring.c" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/wiring_digital.c" />
-          <root url="file:///usr/share/arduino/hardware/arduino/cores/arduino/WInterrupts.c" />
-        </excluded>
       </library>
     </orderEntry>
   </component>

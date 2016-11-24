@@ -45,7 +45,7 @@
 
 #define CONSOLE_BAUDRATE    19200       // baudrate used for console
 #define Console Serial
-//#define ESP8266port Serial2
+#define ESP8266port Serial2
 //#define Bluetooth Serial1
 
 Ibt motorL(pinMotorLeftEnable, pinMotorLeftPWMR, pinMotorLeftPWML, pinMotorLeftSense);
@@ -185,6 +185,7 @@ void Sekacka::loop(){
 }
 
 void Sekacka::printInfo(){
+    printJsonData();
     switch (usePrintInfo){
         case 1:
             Console.print("M1 - V ");
@@ -200,6 +201,17 @@ void Sekacka::printInfo(){
             Console.println();
             break;
     }
+}
+
+void Sekacka::printJsonData(){
+    String s = "{";
+    s+= "m1v:" + motorL.getValue() + ",m1s:" + motorL.getSmer() + ",";
+    s+= "m2v:" + motorR.getValue() + ",m2s:" + motorR.getSmer() + ",";
+    s+= "sonCENTERL:" + sonarDistCenterLeft + ",sonCENTERR:" + sonarDistCenterRight + ",";
+    s+= "sonRIGHT:" + sonarDistRight + ",sonLEFT:" + sonarDistLeft + ",";
+    s+= "}";
+    ESP8266port.print(s);
+    Console.println(s);
 }
 
 

@@ -80,6 +80,7 @@ private:
      * Metoda která testuje senzor
      */
     void testSonar();
+
     /**
      * metoda která realtime čte Bluetooth
      */
@@ -89,6 +90,11 @@ private:
      * metoda která reaguje ma přerušení
      */
     void naraz();
+
+    /**
+     * metoda která sestavuje jsoun data a následně posíla na seriovou linku definovanou jako ESP8266port
+     */
+    void printJsonData();
 
     /**
      * náraz potvrzení

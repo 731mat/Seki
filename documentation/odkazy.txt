@@ -20,3 +20,20 @@ https://wingoodharry.wordpress.com/2014/04/15/android-sendreceive-data-with-ardu
 
 // arduino přerušení
 https://www.arduino.cc/en/Reference/AttachInterrupt
+
+// wifi subpozice
+https://hackaday.io/project/4872-subpos-positioning-system
+
+//github subpozice
+https://github.com/subpos/
+
+// mapa pro subpozici
+https://www.scribblemaps.com/
+
+// esp8266 WIFI Beacon generator
+https://gist.github.com/kost/1e1b13d5796a6649f82ec1c08cd0a835
+
+
+//neco o beacon
+http://blog.smartarduino.com/?cat=108
+http://forum.arduino.cc/index.php?topic=367849.0
