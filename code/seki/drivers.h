@@ -25,5 +25,12 @@
  */
 unsigned int readHCSR04(int triggerPin, int echoPin);
 
+/**
+ * funkce k ovládání motoru moweru
+ * @param pin na kterém pinu je připojený regulátor motoru
+ * @param value hodnota rychlosti motoru
+ */
+void motorMower(int pin,int value);
+
 
 #endif //SEKI_DRIVERS_H

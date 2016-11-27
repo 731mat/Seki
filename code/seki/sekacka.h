@@ -89,17 +89,13 @@ private:
     /**
      * metoda která reaguje ma přerušení
      */
-    void naraz();
+    void static naraz();
 
     /**
      * metoda která sestavuje jsoun data a následně posíla na seriovou linku definovanou jako ESP8266port
      */
     void printJsonData();
 
-    /**
-     * náraz potvrzení
-     */
-    bool bumperNaraz;
 
     /**
     * a private variable.

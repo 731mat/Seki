@@ -21,17 +21,22 @@
 #define pinMotorRightSense A1      // Right motor current sense
 
 // ----- sonar ----------------------------------------
-#define pinSonarCenterLeftTrigger 11   // sonar center Trigger
-#define pinSonarCenterLeftEcho 12      // sonar center echo
+#define pinSonarCenterLeftTrigger 50   // sonar center Trigger
+#define pinSonarCenterLeftEcho 52      // sonar center echo
 
-#define pinSonarCenterRightTrigger 13   // sonar center Trigger
-#define pinSonarCenterRightEcho 8      // sonar center echo
+#define pinSonarCenterRightTrigger 46   // sonar center Trigger
+#define pinSonarCenterRightEcho 48      // sonar center echo
 
-#define pinSonarLeftTrigger 38     // sonar left Trigger
-#define pinSonarLeftEcho 40        // sonar left Echo
+#define pinSonarLeftTrigger 42     // sonar left Trigger
+#define pinSonarLeftEcho 44        // sonar left Echo
 
 #define pinSonarRightTrigger 39    // sonar left Trigger
 #define pinSonarRightEcho 37       // sonar left Echo
+
+
+//  --- mower ---------------------------------------
+#define pinMowerPWM 6
+
 
 // ---- bumper --------------------------------------
 #define pinBumperFront A10
@@ -43,7 +48,7 @@
 // ------ orther  -----------------------------------------------
 #define pinLed 13                 // led info
 
-#define CONSOLE_BAUDRATE    19200       // baudrate used for console
+#define CONSOLE_BAUDRATE    115200       // baudrate used for console
 #define Console Serial
 #define ESP8266port Serial2
 //#define Bluetooth Serial1
@@ -75,7 +80,7 @@ Sekacka::Sekacka(){
 
     // sonar
     sonarUse       = 1;      // use ultra sonic sensor?
-    sonarLeftUse   = 0;      // use LEFT ultra sonic sensor
+    sonarLeftUse   = 1;      // use LEFT ultra sonic sensor
     sonarRightUse  = 0;      // use RIGHT ultra sonic sensor
     sonarCenterLeftUse = 1;      // use CENTER ultra sonic sensor
     sonarCenterRightUse = 1;      // use CENTER ultra sonic sensor
@@ -90,11 +95,7 @@ Sekacka::Sekacka(){
 
 
     drive = false; // zapnuti pohybu
-    charBluetooth = 'S';
-
-    bumperNaraz = false;
-
-
+    charBluetooth = 'X';
 }
 
 
@@ -125,6 +126,10 @@ void Sekacka::setup(){
     pinMode(pinSonarRightTrigger, OUTPUT);
     pinMode(pinSonarRightEcho, INPUT);
 
+    // mower
+    pinMode(pinMowerPWM, OUTPUT);
+
+
     // bumper
     pinMode(pinBumperFront, INPUT_PULLUP);
     pinMode(pinBumperBack, INPUT_PULLUP);
@@ -133,10 +138,10 @@ void Sekacka::setup(){
 
 
 
-    attachInterrupt(pinBumperBack, naraz, CHANGE);
-    attachInterrupt(pinBumperFront, naraz, CHANGE);
-    attachInterrupt(pinBumperLeft, naraz, CHANGE);
-    attachInterrupt(pinBumperRight, naraz, CHANGE);
+    attachInterrupt(pinBumperBack, naraz, HIGH);
+    attachInterrupt(pinBumperFront, naraz, HIGH);
+    attachInterrupt(pinBumperLeft, naraz, HIGH);
+    attachInterrupt(pinBumperRight, naraz, HIGH);
 
 
 
@@ -153,14 +158,14 @@ void Sekacka::setup(){
 
     //set time
     startTime = millis();
-    drive = true;
+    drive = false;
     //delay(5000);
 
 }
 
-void Sekacka::naraz(){
-    motorPohyb(MOTOR_STOP,0);
-    bumperNaraz = !bumperNaraz;
+void static Sekacka::naraz(){
+    Console.println("naraz");
+    //motorPohyb(MOTOR_STOP,0);
 }
 
 void Sekacka::loop(){
@@ -180,6 +185,7 @@ void Sekacka::loop(){
       if(!drive){
         motorR.setStop();
         motorL.setStop();
+        motorMower(pinMowerPWM, 0);
       }
       
 }
@@ -196,8 +202,12 @@ void Sekacka::printInfo(){
             Console.print(motorR.getValue());
             Console.print("  S  ");
             Console.print(motorR.getSmer());
-            Console.print("  CENTER:");
+            Console.print("  CENTER L:");
             Console.print(sonarDistCenterLeft);
+            Console.print("  CENTER R:");
+            Console.print(sonarDistCenterRight);
+            Console.print("  left:");
+            Console.print(sonarDistLeft);
             Console.println();
             break;
     }
@@ -205,13 +215,13 @@ void Sekacka::printInfo(){
 
 void Sekacka::printJsonData(){
     String s = "{";
-    s+= "m1v:" + motorL.getValue() + ",m1s:" + motorL.getSmer() + ",";
-    s+= "m2v:" + motorR.getValue() + ",m2s:" + motorR.getSmer() + ",";
-    s+= "sonCENTERL:" + sonarDistCenterLeft + ",sonCENTERR:" + sonarDistCenterRight + ",";
-    s+= "sonRIGHT:" + sonarDistRight + ",sonLEFT:" + sonarDistLeft + ",";
+    s+= "m1v:" + String(motorL.getValue()) + ",m1s:" + String(motorL.getSmer()) + ",";
+    s+= "m2v:" + String(motorR.getValue()) + ",m2s:" + String(motorR.getSmer()) + ",";
+    s+= "sonCENTERL:" + String(sonarDistCenterLeft) + ",sonCENTERR:" + String(sonarDistCenterRight) + ",";
+    s+= "sonRIGHT:" + String(sonarDistRight) + ",sonLEFT:" + String(sonarDistLeft) + ",";
     s+= "}";
     ESP8266port.print(s);
-    Console.println(s);
+    //Console.println(s);
 }
 
 
@@ -258,11 +268,11 @@ int Sekacka::readSensor(char type){
 bool Sekacka::sonarMuzu(char type){
     switch (type) {
         case FRONT:
-            if(sonarDistCenterLeft > distSlow && sonarDistCenterRight > distSlow || sonarDistCenterLeft == 0 && sonarDistCenterRight == 0)
+            if((sonarDistCenterLeft > distSlow || sonarDistCenterLeft == 0) && (sonarDistCenterRight > distSlow  || sonarDistCenterRight == 0))
                 return 1;
             break;
         case FRONT_SLOW:
-            if(sonarDistCenterLeft < distSlow && sonarDistCenterLeft > distMin &&
+            if(sonarDistCenterLeft < distSlow && sonarDistCenterLeft > distMin ||
                sonarDistCenterRight < distSlow && sonarDistCenterRight > distMin)
                 return 1;
             break;
@@ -270,13 +280,20 @@ bool Sekacka::sonarMuzu(char type){
             if(sonarDistLeft < distSlow && sonarDistLeft > distMin)
                 return 1;
             break;
+        case STOP:
+            if((sonarDistCenterLeft < distMin && sonarDistCenterLeft == 0) || (sonarDistCenterRight < distMin && sonarDistCenterRight == 0))
+              return 1;
+            break;
     }
     return 0;
 }
 
 
 void Sekacka::motorUpdate(){
-    if(bt.isCon()){
+
+    motorMower(pinMowerPWM, 255);
+
+    if(false){
       switch(charBluetooth){
           case 'F':
               motorPohyb(MOTOR_FRONT, 100);
@@ -314,6 +331,7 @@ void Sekacka::motorUpdate(){
     
     //zpomalení před překážkou
     
+    Console.println(sonarMuzu(FRONT_SLOW));
     if(sonarMuzu(FRONT_SLOW) && timeRotage == 0){
         motorPohyb(MOTOR_FRONT, 50);
     return;
@@ -346,10 +364,11 @@ void Sekacka::motorUpdate(){
 // int value - od 0 do 100
 
 void Sekacka::motorPohyb(char type, int value = 0){
+  value = map(value, 0,100,0,255);
     switch (type) {
         case MOTOR_FRONT:
-            motorL.setData(true,map(value, 0,100,0,255));
-            motorR.setData(true,map(value, 0,100,0,255));
+            motorL.setData(true,value);
+            motorR.setData(true,value);
         case MOTOR_FRONT_LEFT:
             motorL.setData(true, 128);
             motorR.setData(true, 255);
@@ -410,6 +429,12 @@ void Sekacka::readSerial() {
                 menu();
                 break;
             case 'v':
+                break;
+            case 'D':
+                if(drive == true) drive = false;
+                else drive = true;
+                Console.print("SET drive");
+                Console.println(drive);
                 break;
 
         }
@@ -474,18 +499,25 @@ void Sekacka::testMotors(){
     for (int i = 0; i < 256; i++) {
         motorR.setData(1,i);
         printInfo();
-        delay(100);
+        delay(25);
         Console.println(i);
     }
     for (int i = 256; i > 0;i--) {
         motorR.setData(1,i);
         printInfo();
-        delay(100);
+        delay(25);
         Console.println(i);
     }
     motorR.setStop();
 
-
+    // test mower
+    for (int i = 0; i < 256; i++) {
+        motorMower(pinMowerPWM,i);
+        printInfo();
+        delay(25);
+        Console.println(i);
+    }
+    motorMower(pinMowerPWM, 0);
 }
 
 void Sekacka::testSonar(){

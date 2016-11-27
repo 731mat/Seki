@@ -21,3 +21,10 @@ unsigned int readHCSR04(int triggerPin, int echoPin){
     //Serial.print(distance);
     //Serial.print("cm\n");
 }
+
+void motorMower(int pin,int value){
+    if(value >= 0 && value <= 255)
+        analogWrite(pin, value);
+    else
+        analogWrite(pin, 0);
+}
