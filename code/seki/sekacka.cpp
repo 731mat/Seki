@@ -37,9 +37,13 @@
 //  --- mower ---------------------------------------
 #define pinMowerPWM 6
 
+// ---- LEDdisplay ------------------------
+#define pinLedDisplayCLK 10
+#define pinLedDisplayCS 9
+#define pinLedDisplayDIN 8
 
 // ---- bumper --------------------------------------
-#define pinBumperFront A10
+#define pinBumperFront 40
 #define pinBumperBack A11
 #define pinBumperLeft A12
 #define pinBumperRight A13
@@ -56,6 +60,7 @@
 Ibt motorL(pinMotorLeftEnable, pinMotorLeftPWMR, pinMotorLeftPWML, pinMotorLeftSense);
 Ibt motorR(pinMotorRightEnable, pinMotorRightPWMR, pinMotorRightPWML, pinMotorRightSense);
 Bluetooth bt;
+LedDisplay ld(pinLedDisplayDIN, pinLedDisplayCS, pinLedDisplayCLK, 1);
 
 
 Sekacka::Sekacka(){
@@ -143,7 +148,8 @@ void Sekacka::setup(){
     attachInterrupt(pinBumperLeft, naraz, HIGH);
     attachInterrupt(pinBumperRight, naraz, HIGH);
 
-
+    //ledDisplay
+    ld.init();
 
     // led
     pinMode(pinLed, OUTPUT);
@@ -251,6 +257,7 @@ void Sekacka::readSensors() {
                 senSonarTurn = SEN_SONAR_RIGHT;
                 break;
         }
+        ld.setSensor(sonarDistCenterLeft,sonarDistCenterRight, sonarDistRight, sonarDistLeft);
     }
 }
 
@@ -277,11 +284,11 @@ bool Sekacka::sonarMuzu(char type){
                 return 1;
             break;
         case LEFT:
-            if(sonarDistLeft < distSlow && sonarDistLeft > distMin)
+            if(sonarDistLeft > distMin || sonarDistLeft == 0)
                 return 1;
             break;
         case STOP:
-            if((sonarDistCenterLeft < distMin && sonarDistCenterLeft == 0) || (sonarDistCenterRight < distMin && sonarDistCenterRight == 0))
+            if((sonarDistCenterLeft < distMin && sonarDistCenterLeft != 0) || (sonarDistCenterRight < distMin && sonarDistCenterRight != 0))
               return 1;
             break;
     }
@@ -331,24 +338,27 @@ void Sekacka::motorUpdate(){
     
     //zpomalení před překážkou
     
-    Console.println(sonarMuzu(FRONT_SLOW));
     if(sonarMuzu(FRONT_SLOW) && timeRotage == 0){
         motorPohyb(MOTOR_FRONT, 50);
     return;
     }
 
     // otočení
-    if(sonarMuzu(STOP) || timeRotage > 0  && timeRotage < timeRotageMotor){
+    if(sonarMuzu(STOP) && sonarMuzu(LEFT)|| (timeRotage > 0  && timeRotage < timeRotageMotor && sonarMuzu(LEFT))){
       if(timeRotage == 0){
         motorPohyb(MOTOR_STOP,0);
         delay(500);
       }
+        if(sonarMuzu(LEFT) == 0){
+          motorPohyb(MOTOR_STOP,0);
+          return;
+        }
         timeRotage++;
         motorPohyb(MOTOR_LEFT,0);
         timeUpdateTime = 0;
         return 0;
     }else
-        timeRotage = 0;
+        timeRotage = 0;    
 
     // pomalý rozjezd
         if(timeUpdateTime < updateTimeMotor/2){
@@ -365,10 +375,12 @@ void Sekacka::motorUpdate(){
 
 void Sekacka::motorPohyb(char type, int value = 0){
   value = map(value, 0,100,0,255);
+    ld.setSmer(type);
     switch (type) {
         case MOTOR_FRONT:
             motorL.setData(true,value);
             motorR.setData(true,value);
+            break;
         case MOTOR_FRONT_LEFT:
             motorL.setData(true, 128);
             motorR.setData(true, 255);
@@ -484,12 +496,12 @@ void Sekacka::menu(){
 void Sekacka::printMenu(){
     Console.println();
     Console.println(F(" MAIN MENU:"));
-    Console.println(F("1=test motors"));
-    Console.println(F("2=test sonar"));
-    Console.println(F("I=infoStart"));
-    Console.println(F("D=start drive"));
+    Console.println(F("1= test motors"));
+    Console.println(F("2= test sonar (exit 'm')"));
+    Console.println(F("I= infoStart"));
+    Console.println(F("D= start drive"));
     Console.println(F("R= RESET"));
-    Console.println(F("0=exit"));
+    Console.println(F("0= exit (hl.smycka)"));
     Console.println();
 }
 
@@ -521,13 +533,18 @@ void Sekacka::testMotors(){
 }
 
 void Sekacka::testSonar(){
-  char ch = "";
+    char ch = "";
     while(true) {
          readSensors();
-         Console.println(sonarDistCenterLeft);
-         if (Console.available() > 0) 
-            ch = (char)Console.read();
-         if(ch == "m")
+         Console.print("  CENTER L:");
+         Console.print(sonarDistCenterLeft);
+         Console.print("  CENTER R:");
+         Console.print(sonarDistCenterRight);
+         Console.print("  left:");
+         Console.print(sonarDistLeft);
+         Console.println();
+         ch = (char)Console.read();
+         if(ch == 'm')
             return 0;
     }
 }

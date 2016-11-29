@@ -29,6 +29,22 @@ public:
      */
     virtual void loop(void);
 
+    /**
+     * Enum pro urční směru jízdy
+     * určuje směr jízdy
+     */
+    enum {
+        MOTOR_FRONT,          /**< enum value MOTOR_FRONT. */
+        MOTOR_FRONT_LEFT,     /**< enum value MOTOR_FRONT_LEFT. */
+        MOTOR_FRONT_RIGHT,    /**< enum value MOTOR_FRONT_RIGHT. */
+        MOTOR_BACK,           /**< enum value MOTOR_BACK. */
+        MOTOR_BACK_LEFT,      /**< enum value MOTOR_BACK_LEFT. */
+        MOTOR_BACK_RIGHT,     /**< enum value MOTOR_BACK_RIGHT. */
+        MOTOR_LEFT,           /**< enum value MOTOR_LEFT. */
+        MOTOR_RIGHT,          /**< enum value MOTOR_RIGHT. */
+        MOTOR_STOP,           /**< enum value MOTOR_STOP. */
+    };
+
 private:
     /**
      * a function variable.
@@ -237,20 +253,6 @@ private:
         SEN_SONAR_RIGHT,          /**< enum value SEN_SONAR_RIGHT. */
     };
 
-    /**
-     * Enum pro urční směru jízdy
-     * určuje směr jízdy
-     */
-    enum {
-        MOTOR_FRONT,          /**< enum value MOTOR_FRONT. */
-        MOTOR_FRONT_LEFT,     /**< enum value MOTOR_FRONT_LEFT. */
-        MOTOR_FRONT_RIGHT,    /**< enum value MOTOR_FRONT_RIGHT. */
-        MOTOR_BACK,           /**< enum value MOTOR_BACK. */
-        MOTOR_BACK_LEFT,      /**< enum value MOTOR_BACK_LEFT. */
-        MOTOR_BACK_RIGHT,     /**< enum value MOTOR_BACK_RIGHT. */
-        MOTOR_LEFT,           /**< enum value MOTOR_LEFT. */
-        MOTOR_RIGHT,          /**< enum value MOTOR_RIGHT. */
-        MOTOR_STOP,           /**< enum value MOTOR_STOP. */
-    };
+
 };
 #endif //SEKI_Seki_H

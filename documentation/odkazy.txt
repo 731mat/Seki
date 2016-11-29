@@ -37,3 +37,10 @@ https://gist.github.com/kost/1e1b13d5796a6649f82ec1c08cd0a835
 //neco o beacon
 http://blog.smartarduino.com/?cat=108
 http://forum.arduino.cc/index.php?topic=367849.0
+
+
+// ledDisplay 8x8 metrix  LIBRARY
+http://tronixstuff.com/2013/10/11/tutorial-arduino-max7219-led-display-driver-ic/
+
+// led byte generator
+http://blog.riyas.org/2013/12/online-led-matrix-font-generator-with.html
