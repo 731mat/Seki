@@ -112,6 +112,8 @@ private:
      */
     void printJsonData();
 
+    void Sekacka::buzzer(int);
+
 
     /**
     * a private variable.
@@ -230,6 +232,9 @@ private:
     *  vzdalenost SPOMAL
     */
     int distSlow;
+
+    unsigned long nextOffBuzzer;
+    
 
     /**
      * Enum pro povolení jízdy od senzoru

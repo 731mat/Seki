@@ -28,3 +28,10 @@ void motorMower(int pin,int value){
     else
         analogWrite(pin, 0);
 }
+
+void buzzerDriver(int pin, bool func){
+  if(func)
+        digitalWrite(pin, HIGH);
+    else
+        digitalWrite(pin, LOW);
+  }

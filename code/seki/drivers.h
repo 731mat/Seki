@@ -24,6 +24,7 @@
  * @return
  */
 unsigned int readHCSR04(int triggerPin, int echoPin);
+void buzzerDriver(int, bool);
 
 /**
  * funkce k ovládání motoru moweru

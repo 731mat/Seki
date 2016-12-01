@@ -6,6 +6,7 @@
 #include "ibt.h"
 #include "drivers.h"
 #include "bluetooth.h"
+#include "ledDisplay.h"
 #include <Arduino.h>
 
 
@@ -51,6 +52,9 @@
 
 // ------ orther  -----------------------------------------------
 #define pinLed 13                 // led info
+#define pinButtonDrive 41
+#define pinBuzzer 43
+
 
 #define CONSOLE_BAUDRATE    115200       // baudrate used for console
 #define Console Serial
@@ -183,6 +187,9 @@ void Sekacka::loop(){
         nextTimeInfo = millis() + updateTimeInfo;
         printInfo();
     }
+    
+    if (millis() >= nextOffBuzzer)
+      buzzerDriver(pinBuzzer, 1);
 
     if (millis() >= nextTimeMotor && drive) {
         nextTimeMotor = millis() + updateTimeMotor;
@@ -548,3 +555,8 @@ void Sekacka::testSonar(){
             return 0;
     }
 }
+
+void Sekacka::buzzer(int sec){
+  buzzerDriver(pinBuzzer, 1);
+  nextOffBuzzer = sec + millis();
+  }
