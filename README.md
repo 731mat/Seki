@@ -23,3 +23,15 @@ http://www.mat.8u.cz
 - [ ] Zjistit jak funguje triangulace
 - [ ] aplikace triangulace
 - [ ] zapracvání triangulace do projektu SEKI
+
+
+### Verze
+* 0.1  -  prvotní vývoje
+* 0.2  -  dva kusy regulárotu tupu H-bridge
+* 0.3  -  jiné dva kusy regulárotu tupu H-bridge
+* 0.4  -  vyroba oboustraneho pložneho spoje pro dula H-bridge s arduinem
+* 0.5  -  ovládání přes bluetooth
+* 0.6  -  zakomponování regulátoru IBT-2 + autonomní řízení
+* 1.0  -  první stavilní verze s jedním ultrazvukem + bluetooth
+* 1.1  -  uvedení do provozu a zakomponování led displeje + mower motor
+* 1.2  -  přidání esp8266 pro výpis
