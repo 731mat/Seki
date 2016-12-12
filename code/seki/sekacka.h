@@ -13,6 +13,7 @@
  * Seki class. Třída přistupuje k zařízením sekačky a stará se o ovlád
  */
 class Sekacka {
+  volatile int myInterruptVar;
 public:
     /**
      * A constructor.
@@ -44,7 +45,7 @@ public:
         MOTOR_RIGHT,          /**< enum value MOTOR_RIGHT. */
         MOTOR_STOP,           /**< enum value MOTOR_STOP. */
     };
-
+    
 private:
     /**
      * a function variable.
@@ -97,6 +98,8 @@ private:
      */
     void testSonar();
 
+    void testButton();
+
     /**
      * metoda která realtime čte Bluetooth
      */
@@ -112,9 +115,11 @@ private:
      */
     void printJsonData();
 
-    void Sekacka::buzzer(int);
+    void buzzer(int);
 
 
+
+    int loopCounter;
     /**
     * a private variable.
     * proměnná která zařizuje druh výpisu na Consoli

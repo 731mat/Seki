@@ -1,8 +1,11 @@
 #include "LedControl.h" //  need the library
 #include "ledDisplay.h"
 
+#define SONARMAX 4000
+#define SONERMIN 0
+
 LedDisplay::LedDisplay(int pinDIN, int pinCS, int pinCLK, int countDisplays){
-    this->lc=LedControl(pinDIN,pinCS,pinCLK,countDisplays);
+    this->lc=LedControl(31,33,35,1);
 }
 void LedDisplay::init()
 {
@@ -51,7 +54,6 @@ void LedDisplay::setSmer(char type){
     sipka();
 }
 
-
 void LedDisplay::setSensor(unsigned int sonarDistCenterLeft, unsigned int sonarDistCenterRight, unsigned int sonarDistRight, unsigned int sonarDistLeft){
     this->sonarDistCenterLeft = sonarDistCenterLeft;
     this->sonarDistCenterRight = sonarDistCenterRight;
@@ -61,31 +63,34 @@ void LedDisplay::setSensor(unsigned int sonarDistCenterLeft, unsigned int sonarD
 }
 
 void LedDisplay::vypisSensor(){
+      if (millis() <= this->lastUpdate) 
+      return;
 
     // center left
     // display culonm row true/false
     int i = 0;
 
     // center left
-    i = map(sonarDistCenterLeft,0,4000,0,4);
+    i = map(sonarDistCenterLeft,SONARMIN,SONARMAX,0,4);
     for (; i >= 0; i--) {
-        this->lc.setLed(0,0,i,true);
+        lc.setLed(0,0,i,true);
     }
     //center right
-    i = map(sonarDistCenterRight,0,4000,0,4);
+    i = map(sonarDistCenterRight,SONARMIN,SONARMAX,0,4);
     for (; i >= 0; i--) {
-        this->lc.setLed(0,7,i,true);
+        lc.setLed(0,7,i,true);
     }
 
     //right
-    i = map(sonarDistRight,0,4000,0,4);
+    i = map(sonarDistRight,SONARMIN,SONARMAX,0,4);
     for (; i >= 0; i--) {
-        this->lc.setLed(0,i,0,true);
+        lc.setLed(0,i,0,true);
     }
 
     //left
-    i = map(sonarDistLeft,0,4000,0,4);
+    i = map(sonarDistLeft,SONARMIN,SONARMAX,0,4);
     for (; i >= 0; i--) {
-        this->lc.setLed(0,i,7,true);
+        lc.setLed(0,i,7,true);
     }
+    
 }

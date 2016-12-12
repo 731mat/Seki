@@ -11,7 +11,7 @@ Bluetooth::Bluetooth(){
     btRate = 9600;
     Serial1.begin(btRate);
     Serial.begin(19200);
-    setName("pokus");
+    //setName("pokus");
     //setPin(123);
 }
 

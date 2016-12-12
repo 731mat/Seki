@@ -44,3 +44,17 @@ http://tronixstuff.com/2013/10/11/tutorial-arduino-max7219-led-display-driver-ic
 
 // led byte generator
 http://blog.riyas.org/2013/12/online-led-matrix-font-generator-with.html
+
+// schema developer board
+https://myesp8266.blogspot.cz/2015/03/other-interesting-board-is-this-board.html
+
+// esp8266 type 201 boot
+https://arduining.files.wordpress.com/2015/12/boot-modes.jpg?w=595
+
+// android mega přerušení
+https://arduino-info.wikispaces.com/file/view/Mega2560_R3_Label-small-v2%20(2).png/471429496/800x526/Mega2560_R3_Label-small-v2%20(2).png
+http://gammon.com.au/images/Arduino/attachInterruptPinMappings.png
+
+
+//arduino mega ma 14 PWM
+https://arduino-info.wikispaces.com/file/view/Mega2-900.jpg/421499040/Mega2-900.jpg

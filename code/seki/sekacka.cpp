@@ -39,24 +39,26 @@
 #define pinMowerPWM 6
 
 // ---- LEDdisplay ------------------------
-#define pinLedDisplayCLK 10
-#define pinLedDisplayCS 9
-#define pinLedDisplayDIN 8
+#define pinLedDisplayCLK 33
+#define pinLedDisplayCS 35
+#define pinLedDisplayDIN 31
 
 // ---- bumper --------------------------------------
-#define pinBumperFront 40
-#define pinBumperBack A11
+#define pinBumperFront 2
+#define pinBumperBack 3
 #define pinBumperLeft A12
 #define pinBumperRight A13
 
 
 // ------ orther  -----------------------------------------------
 #define pinLed 13                 // led info
-#define pinButtonDrive 41
-#define pinBuzzer 43
+#define pinButtonDrive 47
+#define pinBuzzer 36
 
 
 #define CONSOLE_BAUDRATE    115200       // baudrate used for console
+#define ESP8266_BAUDRATE    115200       // baudrate used for console
+
 #define Console Serial
 #define ESP8266port Serial2
 //#define Bluetooth Serial1
@@ -104,13 +106,14 @@ Sekacka::Sekacka(){
 
 
     drive = false; // zapnuti pohybu
-    charBluetooth = 'X';
+    charBluetooth = 'S';
 }
 
 
 void Sekacka::setup(){
     //set console
     Console.begin(CONSOLE_BAUDRATE);
+    ESP8266port.begin(ESP8266_BAUDRATE);
     Console.println("SETUP");
 
     // left wheel motor
@@ -135,6 +138,13 @@ void Sekacka::setup(){
     pinMode(pinSonarRightTrigger, OUTPUT);
     pinMode(pinSonarRightEcho, INPUT);
 
+    // button
+    pinMode(pinButtonDrive, INPUT);
+    
+    // buzzer
+    pinMode(pinBuzzer, OUTPUT);
+    digitalWrite(pinBuzzer, HIGH);
+    
     // mower
     pinMode(pinMowerPWM, OUTPUT);
 
@@ -148,7 +158,7 @@ void Sekacka::setup(){
 
 
     attachInterrupt(pinBumperBack, naraz, HIGH);
-    attachInterrupt(pinBumperFront, naraz, HIGH);
+    attachInterrupt(pinBumperFront, naraz, CHANGE);
     attachInterrupt(pinBumperLeft, naraz, HIGH);
     attachInterrupt(pinBumperRight, naraz, HIGH);
 
@@ -169,23 +179,26 @@ void Sekacka::setup(){
     //set time
     startTime = millis();
     drive = false;
+    loopCounter = 0;
     //delay(5000);
 
 }
 
 void static Sekacka::naraz(){
-    Console.println("naraz");
+    Serial.println("naraz");
     //motorPohyb(MOTOR_STOP,0);
+    //myInterruptVar = 10; 
 }
 
 void Sekacka::loop(){
-    //stateTime = millis() - stateStartTime;;
+    loopCounter++;
     readSensors();
     readSerial();
     readBluetooth();
     if (millis() >= nextTimeInfo && usePrintInfo !=0) {
         nextTimeInfo = millis() + updateTimeInfo;
         printInfo();
+        loopCounter = 0;
     }
     
     if (millis() >= nextOffBuzzer)
@@ -232,6 +245,8 @@ void Sekacka::printJsonData(){
     s+= "m2v:" + String(motorR.getValue()) + ",m2s:" + String(motorR.getSmer()) + ",";
     s+= "sonCENTERL:" + String(sonarDistCenterLeft) + ",sonCENTERR:" + String(sonarDistCenterRight) + ",";
     s+= "sonRIGHT:" + String(sonarDistRight) + ",sonLEFT:" + String(sonarDistLeft) + ",";
+    s+= "loopCounter:" + String(loopCounter) + ",";
+    s+= "startTime:" + String(millis() - stateStartTime) + ",";
     s+= "}";
     ESP8266port.print(s);
     //Console.println(s);
@@ -365,14 +380,18 @@ void Sekacka::motorUpdate(){
         timeUpdateTime = 0;
         return 0;
     }else
-        timeRotage = 0;    
+        timeRotage = 0;
+
+    // když nemuže dopředu a ani vlevo
+    if(sonarMuzu(STOP) && !sonarMuzu(LEFT))
+        motorPohyb(MOTOR_STOP,0);
 
     // pomalý rozjezd
-        if(timeUpdateTime < updateTimeMotor/2){
-            motorPohyb(MOTOR_FRONT, map(timeUpdateTime,0,50,0,100));
-        }else{
-            motorPohyb(MOTOR_FRONT, 100);
-        }
+    if(timeUpdateTime < updateTimeMotor/2){
+        motorPohyb(MOTOR_FRONT, map(timeUpdateTime,0,50,0,100));
+    }else{
+        motorPohyb(MOTOR_FRONT, 100);
+    }
 }
 
 
@@ -434,7 +453,7 @@ void Sekacka::readBluetooth(){
     if(charBluetoothPom == 'M')
       return 0;
     charBluetooth = charBluetoothPom;
-      }
+}
 
 ////////    Console /////////////////////////////////////////
 
@@ -478,6 +497,10 @@ void Sekacka::menu(){
                     testSonar();
                     printMenu();
                     break;
+                case '3':
+                    testButton();
+                    printMenu();
+                    break;
                 case 'D':
                     if(drive == true) drive = false;
                     else drive = true;
@@ -505,6 +528,7 @@ void Sekacka::printMenu(){
     Console.println(F(" MAIN MENU:"));
     Console.println(F("1= test motors"));
     Console.println(F("2= test sonar (exit 'm')"));
+    Console.println(F("3= test button (exit 'm')"));
     Console.println(F("I= infoStart"));
     Console.println(F("D= start drive"));
     Console.println(F("R= RESET"));
@@ -519,20 +543,17 @@ void Sekacka::testMotors(){
         motorR.setData(1,i);
         printInfo();
         delay(25);
-        Console.println(i);
     }
     for (int i = 256; i > 0;i--) {
         motorR.setData(1,i);
         printInfo();
         delay(25);
-        Console.println(i);
     }
     motorR.setStop();
 
     // test mower
     for (int i = 0; i < 256; i++) {
         motorMower(pinMowerPWM,i);
-        printInfo();
         delay(25);
         Console.println(i);
     }
@@ -543,6 +564,7 @@ void Sekacka::testSonar(){
     char ch = "";
     while(true) {
          readSensors();
+         ld.vypisSensor();
          Console.print("  CENTER L:");
          Console.print(sonarDistCenterLeft);
          Console.print("  CENTER R:");
@@ -550,6 +572,17 @@ void Sekacka::testSonar(){
          Console.print("  left:");
          Console.print(sonarDistLeft);
          Console.println();
+         ch = (char)Console.read();
+         if(ch == 'm')
+            return 0;
+    }
+}
+void Sekacka::testButton(){
+    char ch = "";
+    int i = 0;
+    while(true) {
+         i = digitalRead(pinButtonDrive);
+         Console.println(i);
          ch = (char)Console.read();
          if(ch == 'm')
             return 0;

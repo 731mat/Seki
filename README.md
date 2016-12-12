@@ -1,21 +1,14 @@
-# Seki
-> Prostě sekačka co seká sama
-
-<img src="https://github.com/731mat/Seki-ardumower/blob/master/documentation/photo/20160316_193008.jpg" alt="Motory ze stahovací oken Seat Toledo" width="200" height="200" />
-
-<img src="https://github.com/731mat/Seki-ardumower/blob/master/documentation/photo/20160318_170407.jpg" alt="Zátěžové testy" width="200" height="200" />
-
-<img src="https://github.com/731mat/Seki-ardumower/blob/master/documentation/photo/20160830_115834.jpg" alt="Namontování regulátorů pro motoryy" width="200" height="200" />
-
-
-
-## Project site
-http://www.mat.8u.cz
+"<tr><th>motor 1 rychlost</th><th>" + obj.m1v +"</th>" + 
+"<tr><th>motor 1 smer</th><th>" + obj.m1s +"</th>" + 
+"<tr><th>motor 2 rychlost</th><th>" + obj.m2v +"</th>" + 
+"<tr><th>motor 2 smer</th><th>" + obj.m2s +"</th>" +
+"<tr><th>sonar center left</th><th>" + obj.sonCENTERL +"</th>" +
+"<tr><th>sonar center right</th><th>" + obj.sonCENTERR +"</th>" +  
+"<tr><th>sonar left</th><th>" + obj.sonLEFT +"</th>" +  
+"<tr><th>loop on 500 ms</th><th>" + obj.countLoop +"</th>" +  
 
 
-## čeho bych chtěl dosáhnout
-* Pročíst a zjistit jak to funguje
-* vymyzat zbytečné věci - nepoužiji GPS ani Perimetre loop
-* Zjistit jak funguje triangulace
-* aplikace triangulace
-* zapracvání triangulace do projektu SEKI
+<table style="width:100%">
+  <tr>
+    <th>Firstname</th>
+    <th>Lastname</th>
