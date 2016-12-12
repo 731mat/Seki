@@ -4,6 +4,12 @@
 *.o
 *.obj
 
+# cmake
+.cmake
+
+#xml
+.xml
+
 # Precompiled Headers
 *.gch
 *.pch
