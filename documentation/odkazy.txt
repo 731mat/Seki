@@ -35,6 +35,8 @@ https://gist.github.com/kost/1e1b13d5796a6649f82ec1c08cd0a835
 
 
 //neco o beacon
+http://www.esp8266.com/viewtopic.php?f=19&t=8916&start=8
+http://bbs.espressif.com/viewtopic.php?t=1619
 http://blog.smartarduino.com/?cat=108
 http://forum.arduino.cc/index.php?topic=367849.0
 
@@ -58,3 +60,13 @@ http://gammon.com.au/images/Arduino/attachInterruptPinMappings.png
 
 //arduino mega ma 14 PWM
 https://arduino-info.wikispaces.com/file/view/Mega2-900.jpg/421499040/Mega2-900.jpg
+
+// prikaz doxygen
+doxywizard
+
+//bluetooth AT comands
+http://www.instructables.com/id/AT-command-mode-of-HC-05-Bluetooth-module/step5/AT-commands/
+
+//dokumentace
+http://arduino.cz
+https://www.root.cz/clanky/esp32-je-tu-co-prinese-nastupce-esp8266/

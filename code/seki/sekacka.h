@@ -116,6 +116,7 @@ private:
     void printJsonData();
 
     void buzzer(int);
+    void driveBluetooth();
 
 
 
@@ -129,7 +130,8 @@ private:
     * a public variable.
     * čas začátku smyčkyv loop
     */
-    unsigned long startTime;
+    unsigned long stateStartTime;
+    unsigned long timeButtonDelay;
     /**
     * čas kdy bude další výpis informací
     */
@@ -167,6 +169,7 @@ private:
     */
     char charBluetooth;
 
+    char buttonUse;
 
     // --------- bumper ---------------------------------
     /**

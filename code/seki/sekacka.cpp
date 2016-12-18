@@ -12,13 +12,13 @@
 
 // ------ pins---------------------------------------
 #define pinMotorLeftEnable 24     //  Forward drive left enable
-#define pinMotorLeftPWMR 2         //  Forward left motor PWM pin
-#define pinMotorLeftPWML 3         //  backward left motor PWM pin
+#define pinMotorLeftPWMR 4         //  Forward left motor PWM pin
+#define pinMotorLeftPWML 5         //  backward left motor PWM pin
 #define pinMotorLeftSense A0       //  left motor current sense
 
 #define pinMotorRightEnable 28    // Forward drive right enable
-#define pinMotorRightPWMR 4        // Forward right motor PWM pin
-#define pinMotorRightPWML 5        // backward right motor PWM pin
+#define pinMotorRightPWMR 6        // Forward right motor PWM pin
+#define pinMotorRightPWML 7        // backward right motor PWM pin
 #define pinMotorRightSense A1      // Right motor current sense
 
 // ----- sonar ----------------------------------------
@@ -36,7 +36,7 @@
 
 
 //  --- mower ---------------------------------------
-#define pinMowerPWM 6
+#define pinMowerPWM 45
 
 // ---- LEDdisplay ------------------------
 #define pinLedDisplayCLK 33
@@ -52,10 +52,10 @@
 
 // ------ orther  -----------------------------------------------
 #define pinLed 13                 // led info
-#define pinButtonDrive 47
+#define pinButtonDrive 32
 #define pinBuzzer 36
 
-
+// ----- Serial line speed --------------------------------
 #define CONSOLE_BAUDRATE    115200       // baudrate used for console
 #define ESP8266_BAUDRATE    115200       // baudrate used for console
 
@@ -73,7 +73,7 @@ Sekacka::Sekacka(){
 
     usePrintInfo=1;     // co se bude vypisovat z print info
 
-    startTime = 0;     // start in milis()
+    stateStartTime = 0;     // start in milis()
     nextTimeInfo = 0;     // cislo kdy bude budouci aktualizace
     updateTimeInfo = 500; // update co 0.5 sec.
 
@@ -83,6 +83,9 @@ Sekacka::Sekacka(){
     timeRotage = 0;         // smycky k otoceni sekiho
     timeRotageMotor = 25;  // kolik smycek "timeRotage" je zapotřebi k otoceni sekiho
 
+    // button
+    buttonUse = 0;
+    
     // bumper
     bumperUse       = 0;      // use bumper?
     bumperCenterUse   = 0;      // use CENTER
@@ -106,7 +109,7 @@ Sekacka::Sekacka(){
 
 
     drive = false; // zapnuti pohybu
-    charBluetooth = 'S';
+    charBluetooth = 'X';
 }
 
 
@@ -143,7 +146,7 @@ void Sekacka::setup(){
     
     // buzzer
     pinMode(pinBuzzer, OUTPUT);
-    digitalWrite(pinBuzzer, HIGH);
+    digitalWrite(pinBuzzer, LOW);
     
     // mower
     pinMode(pinMowerPWM, OUTPUT);
@@ -157,8 +160,8 @@ void Sekacka::setup(){
 
 
 
-    attachInterrupt(pinBumperBack, naraz, HIGH);
-    attachInterrupt(pinBumperFront, naraz, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(pinBumperBack), naraz, HIGH);
+    attachInterrupt(digitalPinToInterrupt(pinBumperFront), naraz, HIGH);
     attachInterrupt(pinBumperLeft, naraz, HIGH);
     attachInterrupt(pinBumperRight, naraz, HIGH);
 
@@ -177,7 +180,7 @@ void Sekacka::setup(){
     bt.setName("ads");
 
     //set time
-    startTime = millis();
+    stateStartTime = millis();
     drive = false;
     loopCounter = 0;
     //delay(5000);
@@ -194,24 +197,26 @@ void Sekacka::loop(){
     loopCounter++;
     readSensors();
     readSerial();
-    readBluetooth();
+    bt.readBT();
+    
     if (millis() >= nextTimeInfo && usePrintInfo !=0) {
         nextTimeInfo = millis() + updateTimeInfo;
         printInfo();
+        ld.printInfo();
         loopCounter = 0;
     }
     
     if (millis() >= nextOffBuzzer)
-      buzzerDriver(pinBuzzer, 1);
+      buzzerDriver(pinBuzzer, 0);
 
     if (millis() >= nextTimeMotor && drive) {
         nextTimeMotor = millis() + updateTimeMotor;
         motorUpdate();
     }else
-      if(!drive){
-        motorR.setStop();
-        motorL.setStop();
+      if(millis() >= nextTimeMotor && !drive){
+        nextTimeMotor = millis() + updateTimeMotor;
         motorMower(pinMowerPWM, 0);
+        driveBluetooth();
       }
       
 }
@@ -234,6 +239,12 @@ void Sekacka::printInfo(){
             Console.print(sonarDistCenterRight);
             Console.print("  left:");
             Console.print(sonarDistLeft);
+            Console.print("  drive:");
+            Console.print(drive);
+            Console.print("  btUhel:");
+            Console.print(bt.getUhel());
+            Console.print("  btRychlost:");
+            Console.print(bt.getRychlost());
             Console.println();
             break;
     }
@@ -281,6 +292,19 @@ void Sekacka::readSensors() {
         }
         ld.setSensor(sonarDistCenterLeft,sonarDistCenterRight, sonarDistRight, sonarDistLeft);
     }
+    if(buttonUse){
+        int reading = 0;
+        reading = digitalRead(pinButtonDrive);
+
+        if (reading == HIGH && millis() - timeButtonDelay > 1000) {
+          if (drive == false)
+            drive = true;
+          else
+            drive = false;
+      
+          timeButtonDelay = millis();    
+        }
+      }
 }
 
 int Sekacka::readSensor(char type){
@@ -317,45 +341,29 @@ bool Sekacka::sonarMuzu(char type){
     return 0;
 }
 
+void Sekacka::driveBluetooth(){
+    int maxRychlost = map(bt.getRychlost(),0,100,0,255);
 
+    if(bt.getUhel() >=0 && bt.getUhel() <=45){
+        motorR.setData(true,map(bt.getUhel(),45,0,0,maxRychlost));
+        motorL.setData(true,maxRychlost);
+    }
+    if(bt.getUhel() >=45 && bt.getUhel() <=90){
+        motorR.setData(false,map(bt.getUhel(),45,90,0,maxRychlost));
+        motorL.setData(false,maxRychlost);
+    }
+    if(bt.getUhel() >=90 && bt.getUhel() <=135){
+        motorR.setData(false,maxRychlost);
+        motorL.setData(false,map(bt.getUhel(),135,90,0,maxRychlost));
+    }
+    if(bt.getUhel() >=135 && bt.getUhel() <=180){
+        motorR.setData(true,maxRychlost);
+        motorL.setData(true,map(bt.getUhel(),135,180,0,maxRychlost));
+    }
+}
 void Sekacka::motorUpdate(){
 
     motorMower(pinMowerPWM, 255);
-
-    if(false){
-      switch(charBluetooth){
-          case 'F':
-              motorPohyb(MOTOR_FRONT, 100);
-              return 0;
-          case 'B':
-              motorPohyb(MOTOR_BACK, 0);
-              return 0;
-          case 'L':
-              motorPohyb(MOTOR_LEFT, 0);
-              return 0;
-          case 'R':
-              motorPohyb(MOTOR_RIGHT, 0);
-              return 0;
-          case 'S':
-              motorPohyb(MOTOR_STOP, 0);
-              return 0;
-          case 'G':  // frontLEFT
-              motorPohyb(MOTOR_FRONT_LEFT, 0);
-              return 0;
-          case 'I':   // frontRIGHT
-              motorPohyb(MOTOR_FRONT_RIGHT, 0);
-              return 0;
-          case 'H':  // backLEFT
-              motorPohyb(MOTOR_BACK_LEFT, 0);
-              return 0;
-          case 'J':  // backRIGHT
-              motorPohyb(MOTOR_BACK_RIGHT, 0);
-              return 0;
-      }
-      timeUpdateTime = 0;
-      return 0;
-    }
-
     timeUpdateTime++;
     
     //zpomalení před překážkou
@@ -383,9 +391,11 @@ void Sekacka::motorUpdate(){
         timeRotage = 0;
 
     // když nemuže dopředu a ani vlevo
-    if(sonarMuzu(STOP) && !sonarMuzu(LEFT))
+    if(sonarMuzu(STOP) && !sonarMuzu(LEFT)){
         motorPohyb(MOTOR_STOP,0);
-
+        buzzer(500);
+        return 0;
+    }
     // pomalý rozjezd
     if(timeUpdateTime < updateTimeMotor/2){
         motorPohyb(MOTOR_FRONT, map(timeUpdateTime,0,50,0,100));
@@ -449,7 +459,7 @@ void Sekacka::motorPohyb(char type, int value = 0){
 
 void Sekacka::readBluetooth(){
     char charBluetoothPom;
-    charBluetoothPom = bt.readBT();
+    //charBluetoothPom = bt.readBT();
     if(charBluetoothPom == 'M')
       return 0;
     charBluetooth = charBluetoothPom;
@@ -564,7 +574,6 @@ void Sekacka::testSonar(){
     char ch = "";
     while(true) {
          readSensors();
-         ld.vypisSensor();
          Console.print("  CENTER L:");
          Console.print(sonarDistCenterLeft);
          Console.print("  CENTER R:");

@@ -45,6 +45,10 @@ class LedDisplay {
          * Metoda která vypíše sensor
          */
         void vypisSensor();
+
+
+
+        void printInfo();
         /**
          * Enum pro urční směru jízdy
          * určuje směr jízdy
@@ -65,7 +69,7 @@ class LedDisplay {
     private:
 
         //s->lc=LedControl(pinDIN,pinCS,pinCLK,countDisplays);
-        LedControl lc= LedControl(49,51,53,1);
+        LedControl lc= LedControl(31,33,35,1);
         /**
         *  vykreslení šipky
         */

@@ -27,7 +27,7 @@ class Bluetooth {
         /**
         * Metoda čte seriovou linku
         */
-        char readBT();
+        void readBT();
         /**
         * Metoda nastaví jméno modulu HC-06
         * @param name type String nazev bluetooth modulu
@@ -43,7 +43,8 @@ class Bluetooth {
         * @return bool je serial aveible
         */
         bool isCon();
-
+        getRychlost() const;
+        getUhel() const;
 private:
         /**
         *  proměnná pro čtení z seriové liky
@@ -53,6 +54,9 @@ private:
         *  hodnota bychlosti seriové liky pro modul bluetooth
         */
         long btRate;
+
+        int rychlost;
+        int uhel;
 };
 
 
