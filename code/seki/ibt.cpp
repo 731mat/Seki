@@ -18,7 +18,7 @@ void Ibt::setData(bool smer, int value) {
 
     this->smer = smer;
     if(value >= 0 && value <= 255)
-        if(value < 40)
+        if(value != 0 &&  value < 40)
           this->value = 40;
         else
           this->value = value;

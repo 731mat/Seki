@@ -43,8 +43,9 @@ class Bluetooth {
         * @return bool je serial aveible
         */
         bool isCon();
-        getRychlost() const;
-        getUhel() const;
+        int getRychlost() const;
+        int getUhel() const;
+        bool getValueDrive () const;
 private:
         /**
         *  proměnná pro čtení z seriové liky
@@ -57,6 +58,8 @@ private:
 
         int rychlost;
         int uhel;
+        unsigned int killTime;
+        bool valueDrive;
 };
 
 

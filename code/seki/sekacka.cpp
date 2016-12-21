@@ -189,8 +189,6 @@ void Sekacka::setup(){
 
 void static Sekacka::naraz(){
     Serial.println("naraz");
-    //motorPohyb(MOTOR_STOP,0);
-    //myInterruptVar = 10; 
 }
 
 void Sekacka::loop(){
@@ -198,6 +196,7 @@ void Sekacka::loop(){
     readSensors();
     readSerial();
     bt.readBT();
+    drive = bt.getValueDrive();
     
     if (millis() >= nextTimeInfo && usePrintInfo !=0) {
         nextTimeInfo = millis() + updateTimeInfo;
@@ -218,6 +217,7 @@ void Sekacka::loop(){
         motorMower(pinMowerPWM, 0);
         driveBluetooth();
       }
+      
       
 }
 
@@ -252,14 +252,15 @@ void Sekacka::printInfo(){
 
 void Sekacka::printJsonData(){
     String s = "{";
-    s+= "m1v:" + String(motorL.getValue()) + ",m1s:" + String(motorL.getSmer()) + ",";
-    s+= "m2v:" + String(motorR.getValue()) + ",m2s:" + String(motorR.getSmer()) + ",";
-    s+= "sonCENTERL:" + String(sonarDistCenterLeft) + ",sonCENTERR:" + String(sonarDistCenterRight) + ",";
-    s+= "sonRIGHT:" + String(sonarDistRight) + ",sonLEFT:" + String(sonarDistLeft) + ",";
-    s+= "loopCounter:" + String(loopCounter) + ",";
-    s+= "startTime:" + String(millis() - stateStartTime) + ",";
+    s+= "\"m1v\":" + String(motorL.getValue()) + ",\"m1s\":" + String(motorL.getSmer()) + ",";
+    s+= "\"m2v\":" + String(motorR.getValue()) + ",\"m2s\":" + String(motorR.getSmer()) + ",";
+    s+= "\"sonCENTERL\":" + String(sonarDistCenterLeft) + ",\"sonCENTERR\":" + String(sonarDistCenterRight) + ",";
+    s+= "\"sonRIGHT\":" + String(sonarDistRight) + ",\"sonLEFT\":" + String(sonarDistLeft) + ",";
+    s+= "\"countLoop\":" + String(loopCounter) + ",";
+    s+= "\"startTime\":" + String(millis() - stateStartTime);
     s+= "}";
     ESP8266port.print(s);
+    bt.writeBT(s);
     //Console.println(s);
 }
 
@@ -360,7 +361,38 @@ void Sekacka::driveBluetooth(){
         motorR.setData(true,maxRychlost);
         motorL.setData(true,map(bt.getUhel(),135,180,0,maxRychlost));
     }
+
+    if(bt.getUhel() >= 0 && bt.getUhel() <= 11)
+        ld.setSmer(MOTOR_FRONT);
+    if(bt.getUhel() >= 11 && bt.getUhel() <= 33)
+        ld.setSmer(MOTOR_FRONT_RIGHT);
+    //righ    
+    if(bt.getUhel() >=33 && bt.getUhel() <= 56)
+        ld.setSmer(MOTOR_RIGHT);
+
+    if(bt.getUhel() >= 56 && bt.getUhel() <= 78)
+        ld.setSmer(MOTOR_BACK_RIGHT);
+    //   dole
+    if(bt.getUhel() >= 78 && bt.getUhel() <= 101)
+        ld.setSmer(MOTOR_BACK);
+
+    if(bt.getUhel() >=101 && bt.getUhel() <=123)
+        ld.setSmer(MOTOR_BACK_LEFT);
+
+    // left
+    if(bt.getUhel() >=123 && bt.getUhel() <=146)
+        ld.setSmer(MOTOR_LEFT);
+
+    if(bt.getUhel() >=146 && bt.getUhel() <=168)
+        ld.setSmer(MOTOR_FRONT_LEFT);
+
+    if(bt.getUhel() >=168 && bt.getUhel() <=0)
+        ld.setSmer(MOTOR_FRONT);
+
+   if(maxRychlost == 0)
+      ld.setSmer(MOTOR_STOP);
 }
+
 void Sekacka::motorUpdate(){
 
     motorMower(pinMowerPWM, 255);
@@ -393,7 +425,7 @@ void Sekacka::motorUpdate(){
     // když nemuže dopředu a ani vlevo
     if(sonarMuzu(STOP) && !sonarMuzu(LEFT)){
         motorPohyb(MOTOR_STOP,0);
-        buzzer(500);
+        buzzer(1500);
         return 0;
     }
     // pomalý rozjezd
@@ -451,18 +483,6 @@ void Sekacka::motorPohyb(char type, int value = 0){
             motorR.setStop();
     }
     return 0;
-}
-
-
-
-////////    Blouetooth //////////////////////////////////////
-
-void Sekacka::readBluetooth(){
-    char charBluetoothPom;
-    //charBluetoothPom = bt.readBT();
-    if(charBluetoothPom == 'M')
-      return 0;
-    charBluetooth = charBluetoothPom;
 }
 
 ////////    Console /////////////////////////////////////////

@@ -23,7 +23,7 @@ void LedDisplay::init()
     {
         for(int i=0;i<9;i++)
             lc.setRow(0,i,seki[j][i]);
-        delay(1000);
+        delay(100);
     }
 }
 
@@ -34,19 +34,33 @@ void LedDisplay::printInfo(){
 
 void LedDisplay::sipka()
 {
-  byte pole[7][8]={
-              {B00000000,B00001000,B00000100,B00111100,B00111100,B00000100,B00001000,B00000000}, // right
-              {B00000000,B00010000,B00100000,B00111100,B00111100,B00100000,B00010000,B00000000}, // left
-              {B00000000,B00000000,B00111100,B01011010,B00011000,B00011000,B00000000,B00000000}, // front
-              {B00000000,B00000000,B00011000,B00011000,B01011010,B00111100,B00000000,B00000000}, // back
-              {B00000000,B00000000,B01111000,B01100000,B01010000,B01001000,B00000100,B00000000}, // front_left
-              {B00000000,B00000000,B00011110,B00000110,B00001010,B00010010,B00100000,B00000000}, // front_right
-              {B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000}}; // resoult
-
+    int index = 8;
+    switch (this->smer){
+        case MOTOR_FRONT:       index = 0;   break;
+        case MOTOR_FRONT_LEFT:  index = 4;   break;
+        case MOTOR_FRONT_RIGHT: index = 5;   break;
+        case MOTOR_BACK:        index = 1;   break;
+        case MOTOR_BACK_LEFT:   index = 7;   break;
+        case MOTOR_BACK_RIGHT:  index = 6;   break;
+        case MOTOR_LEFT:        index = 2;   break;
+        case MOTOR_RIGHT:       index = 3;   break;
+        default:                index = 8;   break;
+    }
+   
+    byte pole[9][8]={
+            {B00000000,B00001000,B00000100,B00111100,B00111100,B00000100,B00001000,B00000000}, // front
+            {B00000000,B00010000,B00100000,B00111100,B00111100,B00100000,B00010000,B00000000}, // back
+            {B00000000,B00000000,B00111100,B01011010,B00011000,B00011000,B00000000,B00000000}, // left
+            {B00000000,B00000000,B00011000,B00011000,B01011010,B00111100,B00000000,B00000000}, // right
+            {B00000000,B00000000,B00111100,B00001100,B00010100,B00100100,B01000000,B00000000}, // front_left
+            {B00000000,B01000000,B00100100,B00010100,B00001100,B00111100,B00000000,B00000000}, // front_right
+            {B00000000,B00000010,B00100100,B00101000,B00110000,B00111100,B00000000,B00000000}, // back_rig
+            {B00000000,B00000000,B00111100,B00110000,B00101000,B00100100,B00000010,B00000000}, // back_lef
+            {B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000,B00000000}}; // resoult
+              
     this->lc.clearDisplay(0);
-
-    for(int i = 0; i< 8; i++)
-        this->lc.setRow(0,i,pole[this->smer][i]);
+    for(int i = 0; i< 9; i++)
+        this->lc.setRow(0,i,pole[index][i]);
 }
 
 void LedDisplay::setSmer(char type){
@@ -54,10 +68,25 @@ void LedDisplay::setSmer(char type){
 }
 
 void LedDisplay::setSensor(unsigned int sonarDistCenterLeft, unsigned int sonarDistCenterRight, unsigned int sonarDistRight, unsigned int sonarDistLeft){
-    this->sonarDistCenterLeft = sonarDistCenterLeft;
-    this->sonarDistCenterRight = sonarDistCenterRight;
-    this->sonarDistRight = sonarDistRight;
-    this->sonarDistLeft = sonarDistLeft;
+    if (sonarDistCenterLeft > SONARMAX || sonarDistCenterLeft == 0)
+        this->sonarDistCenterLeft = SONARMAX;
+    else
+        this->sonarDistCenterLeft = sonarDistCenterLeft;
+
+    if (sonarDistCenterRight > SONARMAX || sonarDistCenterRight == 0)
+        this->sonarDistCenterRight = SONARMAX;
+    else
+        this->sonarDistCenterRight = sonarDistCenterRight;
+
+    if (sonarDistRight > SONARMAX || sonarDistRight == 0)
+        this->sonarDistRight = SONARMAX;
+    else
+        this->sonarDistRight = sonarDistRight;
+
+    if (sonarDistLeft > SONARMAX || sonarDistLeft == 0)
+        this->sonarDistLeft = SONARMAX;
+    else
+        this->sonarDistLeft = sonarDistLeft;
 }
 
 void LedDisplay::vypisSensor(){

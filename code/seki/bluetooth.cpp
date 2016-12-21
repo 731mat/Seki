@@ -12,6 +12,7 @@ Bluetooth::Bluetooth(){
     Serial.begin(115200);
     //setName("pokus");
     //setPin(123);
+    valueDrive = false;
 }
 
 
@@ -39,8 +40,11 @@ void Bluetooth::readBT(){
         delay(10);
         while (Serial1.available() > 0) { // kdyby náhodou před 'o' == 111 byly nějake nezmane znaky
             buffer = Serial1.read();
-
-            if (buffer == 111){          /// po identifikacnim zanku '0' jsou dva byty jeden rychlost a druhy smer
+            
+            switch(buffer){  
+                      
+              case 111:/// po identifikacnim zanku '0' jsou dva byty jeden rychlost a druhy smer
+                killTime = millis();
                 buffer = Serial1.read();      // přečte
                 if(buffer > -1 && buffer < 101) // oveři zda je to v rozmeti o 0-100
                     this->rychlost = buffer;
@@ -48,17 +52,31 @@ void Bluetooth::readBT(){
                 buffer = Serial1.read();  // přečte
                 if(buffer > -1 && buffer < 181) // overi rozmezi  0 - 100
                   this->uhel = buffer;
+                break;
+
+                
+              case 101:
+                Serial.println("-------DRIVE-----------");
+                buffer = Serial1.read();      // přečte
+                if(buffer > 0 && buffer < 21) // oveři zda je to v rozmeti o 0-100
+                  valueDrive = !valueDrive;
+                break;    
             }
         }
     }
 }
 int Bluetooth::getRychlost()const {
-    return this->rychlost;
+    if (millis() <= killTime + 700)
+        return this->rychlost;
+    return 0;
 }
 
 int Bluetooth::getUhel() const {
     return this->uhel;
 }
+bool Bluetooth::getValueDrive() const{
+  return this->valueDrive;
+  }
 
 bool Bluetooth::isCon(){
     return Serial1;

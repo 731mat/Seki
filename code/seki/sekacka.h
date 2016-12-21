@@ -13,7 +13,6 @@
  * Seki class. Třída přistupuje k zařízením sekačky a stará se o ovlád
  */
 class Sekacka {
-  volatile int myInterruptVar;
 public:
     /**
      * A constructor.
@@ -30,7 +29,9 @@ public:
      */
     virtual void loop(void);
 
-    /**
+
+private:
+   /**
      * Enum pro urční směru jízdy
      * určuje směr jízdy
      */
@@ -46,7 +47,6 @@ public:
         MOTOR_STOP,           /**< enum value MOTOR_STOP. */
     };
     
-private:
     /**
      * a function variable.
      * Metoda která vypisuje info
