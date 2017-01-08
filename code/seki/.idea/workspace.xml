@@ -35,8 +35,8 @@
       <file leaf-file-name="ledDisplay.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ledDisplay.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1035">
-              <caret line="69" column="30" selection-start-line="69" selection-start-column="30" selection-end-line="69" selection-end-column="30" />
+            <state relative-caret-position="15">
+              <caret line="69" column="151" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="151" />
               <folding />
             </state>
           </provider>
@@ -45,8 +45,8 @@
       <file leaf-file-name="sekacka.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sekacka.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="514" column="27" selection-start-line="514" selection-start-column="27" selection-end-line="514" selection-end-column="27" />
+            <state relative-caret-position="240">
+              <caret line="408" column="0" selection-start-line="408" selection-start-column="0" selection-end-line="408" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -65,7 +65,7 @@
       <file leaf-file-name="bluetooth.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bluetooth.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="506">
+            <state relative-caret-position="446">
               <caret line="80" column="47" selection-start-line="80" selection-start-column="47" selection-end-line="80" selection-end-column="47" />
               <folding />
             </state>
@@ -75,8 +75,8 @@
       <file leaf-file-name="sekacka.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sekacka.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="161" column="7" selection-start-line="160" selection-start-column="8" selection-end-line="160" selection-end-column="20" />
+            <state relative-caret-position="364">
+              <caret line="256" column="0" selection-start-line="256" selection-start-column="0" selection-end-line="263" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -98,9 +98,9 @@
         <option value="$PROJECT_DIR$/ibt.h" />
         <option value="$PROJECT_DIR$/ledDisplay.h" />
         <option value="$PROJECT_DIR$/ledDisplay.cpp" />
-        <option value="$PROJECT_DIR$/sekacka.h" />
         <option value="$PROJECT_DIR$/bluetooth.h" />
         <option value="$PROJECT_DIR$/bluetooth.cpp" />
+        <option value="$PROJECT_DIR$/sekacka.h" />
         <option value="$PROJECT_DIR$/sekacka.cpp" />
       </list>
     </option>
@@ -419,11 +419,12 @@
       <workItem from="1482871603558" duration="3483000" />
       <workItem from="1483440941124" duration="783000" />
       <workItem from="1483899672537" duration="2185000" />
+      <workItem from="1483903211015" duration="3630000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="94462000" />
+    <option name="totallyTimeSpent" value="98092000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="744" extended-state="6" />
@@ -779,30 +780,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ledDisplay.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1035">
-          <caret line="69" column="30" selection-start-line="69" selection-start-column="30" selection-end-line="69" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sekacka.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="161" column="7" selection-start-line="160" selection-start-column="8" selection-end-line="160" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bluetooth.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="80" column="47" selection-start-line="80" selection-start-column="47" selection-end-line="80" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bluetooth.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="416">
@@ -811,10 +788,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bluetooth.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="80" column="47" selection-start-line="80" selection-start-column="47" selection-end-line="80" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ledDisplay.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="69" column="151" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="151" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sekacka.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="256" column="0" selection-start-line="256" selection-start-column="0" selection-end-line="263" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sekacka.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="514" column="27" selection-start-line="514" selection-start-column="27" selection-end-line="514" selection-end-column="27" />
+        <state relative-caret-position="240">
+          <caret line="408" column="0" selection-start-line="408" selection-start-column="0" selection-end-line="408" selection-end-column="0" />
           <folding />
         </state>
       </provider>

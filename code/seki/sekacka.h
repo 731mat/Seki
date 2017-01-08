@@ -118,7 +118,10 @@ private:
     void printJsonData();
 
     void buzzer(int);
+    
     void driveBluetooth();
+
+    void addToHistorySensor(int,int,int,int);
 
 
     int previousButtonDrive;
@@ -249,6 +252,16 @@ private:
     int distSlow;
 
     unsigned long nextOffBuzzer;
+
+
+    struct HISTORYSENSOR {
+        int sonarDistLeft;
+        int sonarDistRight;
+        int sonarDistCenterLeft;
+        int sonarDistCenterRight;
+    };
+
+    HISTORYSENSOR historySensor[100];
     
 
     /**

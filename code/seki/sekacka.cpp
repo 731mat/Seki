@@ -295,6 +295,7 @@ void Sekacka::readSensors() {
                 break;
         }
         ld.setSensor(sonarDistCenterLeft,sonarDistCenterRight, sonarDistRight, sonarDistLeft);
+        addToHistorySensor(sonarDistCenterLeft,sonarDistCenterRight, sonarDistRight, sonarDistLeft);
     }
     if(buttonUse){
         int cteni = 0;
@@ -405,7 +406,7 @@ void Sekacka::motorUpdate(){
         timeUpdateTime = 0;
         return;
     }
-    
+
     //zpomalení před překážkou
     // funguje jen jednou - smazat
     if(sonarMuzu(FRONT_SLOW) && timeRotage == 0){
@@ -435,8 +436,7 @@ void Sekacka::motorUpdate(){
     if(sonarMuzu(STOP) && !sonarMuzu(LEFT)){
         loopAutoBack++;
         motorPohyb(MOTOR_STOP,0);
-        //buzzer(1500);
-        Console.println("if start couvani");
+        buzzer(1500);
         return;
     }
     // pomalý rozjezd
@@ -637,3 +637,13 @@ void Sekacka::setDrive(){
     drive = !drive;
     bt.setValueDrive(drive);
 }
+
+ void Sekacka::addToHistorySensor(int dSonarDistCenterLeft, int dSonarDistCenterRight, int dSonarDistRight, int dSonarDistLeft){
+     for (int i = 100; i > 0; i--) {
+         historySensor[i] = historySensor[i-1];
+     }
+     historySensor[0].sonarDistCenterLeft = dSonarDistCenterLeft;
+     historySensor[0].sonarDistCenterRight = dSonarDistCenterRight;
+     historySensor[0].sonarDistRight = dSonarDistRight;
+     historySensor[0].sonarDistLeft = dSonarDistLeft;
+ }
