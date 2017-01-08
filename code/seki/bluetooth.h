@@ -46,6 +46,7 @@ class Bluetooth {
         int getRychlost() const;
         int getUhel() const;
         bool getValueDrive () const;
+        void setValueDrive (bool);
 private:
         /**
         *  proměnná pro čtení z seriové liky

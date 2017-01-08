@@ -1,4 +1,4 @@
-//
+ //
 // Created by mat on 5.11.16.
 //
 
@@ -84,7 +84,7 @@ Sekacka::Sekacka(){
     timeRotageMotor = 25;  // kolik smycek "timeRotage" je zapotřebi k otoceni sekiho
 
     // button
-    buttonUse = 0;
+    buttonUse = 1;
     
     // bumper
     bumperUse       = 0;      // use bumper?
@@ -107,6 +107,8 @@ Sekacka::Sekacka(){
     distMin = 1000;            // vzdalenost senzor - prekazkou kdy musi zastavit
     distSlow = 2000;           // vzdalenost senzor - prekazkou  kdy musi spomalit
 
+    timeButtonDelay = 0;
+    previousButtonDrive = LOW;
 
     drive = false; // zapnuti pohybu
     charBluetooth = 'X';
@@ -161,9 +163,9 @@ void Sekacka::setup(){
 
 
     attachInterrupt(digitalPinToInterrupt(pinBumperBack), naraz, HIGH);
-    attachInterrupt(digitalPinToInterrupt(pinBumperFront), naraz, HIGH);
-    attachInterrupt(pinBumperLeft, naraz, HIGH);
-    attachInterrupt(pinBumperRight, naraz, HIGH);
+    //attachInterrupt(digitalPinToInterrupt(pinBumperFront), naraz, HIGH);
+    //attachInterrupt(pinBumperLeft, naraz, HIGH);
+    //attachInterrupt(pinBumperRight, naraz, HIGH);
 
     //ledDisplay
     ld.init();
@@ -188,7 +190,8 @@ void Sekacka::setup(){
 }
 
 void static Sekacka::naraz(){
-    Serial.println("naraz");
+ //   Serial.println("naraz");
+   //1 drive = !drive;
 }
 
 void Sekacka::loop(){
@@ -294,18 +297,15 @@ void Sekacka::readSensors() {
         ld.setSensor(sonarDistCenterLeft,sonarDistCenterRight, sonarDistRight, sonarDistLeft);
     }
     if(buttonUse){
-        int reading = 0;
-        reading = digitalRead(pinButtonDrive);
+        int cteni = 0;
+        cteni = digitalRead(pinButtonDrive);
 
-        if (reading == HIGH && millis() - timeButtonDelay > 1000) {
-          if (drive == false)
-            drive = true;
-          else
-            drive = false;
-      
-          timeButtonDelay = millis();    
+        if (cteni == HIGH && previousButtonDrive == LOW && millis() - timeButtonDelay > 1000) {
+            setDrive();
+            timeButtonDelay = millis();
         }
-      }
+        previousButtonDrive = cteni;
+    }
 }
 
 int Sekacka::readSensor(char type){
@@ -397,12 +397,20 @@ void Sekacka::motorUpdate(){
 
     motorMower(pinMowerPWM, 255);
     timeUpdateTime++;
+
+    // couvání
+    if(loopAutoBack > 10 && loopAutoBack < 50){
+        motorPohyb(MOTOR_BACK,50);
+        loopAutoBack++;
+        timeUpdateTime = 0;
+        return;
+    }
     
     //zpomalení před překážkou
-    
+    // funguje jen jednou - smazat
     if(sonarMuzu(FRONT_SLOW) && timeRotage == 0){
         motorPohyb(MOTOR_FRONT, 50);
-    return;
+        return;
     }
 
     // otočení
@@ -411,9 +419,10 @@ void Sekacka::motorUpdate(){
         motorPohyb(MOTOR_STOP,0);
         delay(500);
       }
+        // na nic - smazat
         if(sonarMuzu(LEFT) == 0){
-          motorPohyb(MOTOR_STOP,0);
-          return;
+          //motorPohyb(MOTOR_STOP,0);
+          //return;
         }
         timeRotage++;
         motorPohyb(MOTOR_LEFT,0);
@@ -424,13 +433,16 @@ void Sekacka::motorUpdate(){
 
     // když nemuže dopředu a ani vlevo
     if(sonarMuzu(STOP) && !sonarMuzu(LEFT)){
+        loopAutoBack++;
         motorPohyb(MOTOR_STOP,0);
-        buzzer(1500);
-        return 0;
+        //buzzer(1500);
+        Console.println("if start couvani");
+        return;
     }
     // pomalý rozjezd
     if(timeUpdateTime < updateTimeMotor/2){
         motorPohyb(MOTOR_FRONT, map(timeUpdateTime,0,50,0,100));
+        loopAutoBack = 0; // resetování couvání
     }else{
         motorPohyb(MOTOR_FRONT, 100);
     }
@@ -458,8 +470,9 @@ void Sekacka::motorPohyb(char type, int value = 0){
             motorR.setData(true, 128);
             break;
         case MOTOR_BACK:
-            motorR.setData(false, 255);
-            motorL.setData(false, 255);
+            Console.println(value);
+            motorR.setData(false, value);
+            motorL.setData(false, value);
             break;
         case MOTOR_BACK_LEFT:
             motorL.setData(false, 128);
@@ -499,8 +512,7 @@ void Sekacka::readSerial() {
             case 'v':
                 break;
             case 'D':
-                if(drive == true) drive = false;
-                else drive = true;
+                setDrive();
                 Console.print("SET drive");
                 Console.println(drive);
                 break;
@@ -532,8 +544,7 @@ void Sekacka::menu(){
                     printMenu();
                     break;
                 case 'D':
-                    if(drive == true) drive = false;
-                    else drive = true;
+                    setDrive();
                     Console.print("SET drive");
                     Console.println(drive);
                     printMenu();
@@ -622,3 +633,7 @@ void Sekacka::buzzer(int sec){
   buzzerDriver(pinBuzzer, 1);
   nextOffBuzzer = sec + millis();
   }
+void Sekacka::setDrive(){
+    drive = !drive;
+    bt.setValueDrive(drive);
+}

@@ -56,7 +56,7 @@ void Bluetooth::readBT(){
 
                 
               case 101:
-                Serial.println("-------DRIVE-----------");
+                Serial.println("---BLUETOOTH---SET---DRIVE---");
                 buffer = Serial1.read();      // přečte
                 if(buffer > 0 && buffer < 21) // oveři zda je to v rozmeti o 0-100
                   valueDrive = !valueDrive;
@@ -66,7 +66,7 @@ void Bluetooth::readBT(){
     }
 }
 int Bluetooth::getRychlost()const {
-    if (millis() <= killTime + 700)
+    //if (millis() <= killTime + 700)
         return this->rychlost;
     return 0;
 }
@@ -77,6 +77,10 @@ int Bluetooth::getUhel() const {
 bool Bluetooth::getValueDrive() const{
   return this->valueDrive;
   }
+
+void Bluetooth::setValueDrive(bool valueDrive){
+    this->valueDrive = valueDrive;
+}
 
 bool Bluetooth::isCon(){
     return Serial1;

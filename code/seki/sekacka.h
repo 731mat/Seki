@@ -105,6 +105,8 @@ private:
      */
     void readBluetooth();
 
+    void setDrive();
+
     /**
      * metoda která reaguje ma přerušení
      */
@@ -119,6 +121,7 @@ private:
     void driveBluetooth();
 
 
+    int previousButtonDrive;
 
     int loopCounter;
     /**
@@ -152,6 +155,10 @@ private:
     *  smycky obnov motoru
     */
     int timeUpdateTime;
+    /**
+    *  smycky couvání
+    */
+    int loopAutoBack;
     /**
     *  cas obnovy
     */
